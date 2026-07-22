@@ -2765,7 +2765,7 @@
                     let overdueDays=null;
                     if(statusClass!=='lunas' && d.jt){ const jtDate=ptParseDMY(d.jt); if(jtDate && jtDate<todayPtUM){ statusClass='overdue'; overdueDays=ptDaysBetween(todayPtUM,jtDate); } }
                     let tglBayar='';
-                    if(statusClass==='lunas' && day.tanggal){ const dayPart=String(day.tanggal).split('-')[0]; const [tahun,bulanNum]=bulan.split('-'); if(dayPart) tglBayar=`${dayPart.padStart(2,'0')}/${bulanNum}/${tahun}`; }
+                    if(totalBayar>0 && day.tanggal){ const dayPart=String(day.tanggal).split('-')[0]; const [tahun,bulanNum]=bulan.split('-'); if(dayPart) tglBayar=`${dayPart.padStart(2,'0')}/${bulanNum}/${tahun}`; }
                     // Profit dihitung PROPORSIONAL sesuai porsi yang sudah dibayar (model konsinyasi/titip):
                     // - Barang yang belum dibayar dianggap masih brg/stok di toko (bukan kerugian).
                     // - Modal yang "dikorbankan" hanya untuk porsi yang sudah terbayar.
@@ -2797,7 +2797,7 @@
                     const sisaModalTertahanCdd=modalAdaCdd?(modalTotalCdd-modalProporsionalCdd):'';
                     const sisaTagihanCdd=Math.max(0,tagihanCdd-totalBayarCdd);
                     let tglBayarCdd='';
-                    if(sisaTagihanCdd<=0.5 && day.tanggal){ const dayPart=String(day.tanggal).split('-')[0]; const [tahun,bulanNum]=bulan.split('-'); if(dayPart) tglBayarCdd=`${dayPart.padStart(2,'0')}/${bulanNum}/${tahun}`; }
+                    if(totalBayarCdd>0 && day.tanggal){ const dayPart=String(day.tanggal).split('-')[0]; const [tahun,bulanNum]=bulan.split('-'); if(dayPart) tglBayarCdd=`${dayPart.padStart(2,'0')}/${bulanNum}/${tahun}`; }
                     const estimasiProfitSisaCdd=modalAdaCdd?(sisaTagihanCdd-sisaModalTertahanCdd):'';
                     cashDroppingUangMasukData.push({...d,sales:salesNama,tglFaktur:d.tglFaktur||day.tanggal,kategori:isFitri?'fitri':'rupa',produk:produkGabungan,tagihan:tagihanCdd,totalBayar:totalBayarCdd,sisaTagihan:sisaTagihanCdd,tglBayar:tglBayarCdd,modalTotal:modalTotalCdd,modalAda:modalAdaCdd,proporsiBayar:proporsiBayarCdd,modalProporsional:modalProporsionalCdd,profit:profitCdd,profitKotorTotal:profitKotorTotalCdd,sisaModalTertahan:sisaModalTertahanCdd,estimasiProfitSisa:estimasiProfitSisaCdd,profitItems:salesMatch?salesMatch.items:[],_bulan:bulan,_tanggalHari:day.tanggal,_id:cashDroppingUangMasukData.length});
                 });

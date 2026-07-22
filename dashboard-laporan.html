@@ -1051,7 +1051,7 @@
             <div class="card" style="min-width:150px;">
                 <div class="label">🔶 Total Profit Real</div>
                 <div class="value" id="pumSumProfit">Rp 0</div>
-                <div id="pumSumProfitNote" style="display:none; font-size:8px; color:rgba(255,255,255,0.85); font-weight:600; text-decoration:underline; cursor:pointer;" onclick="pumShowMissingProfitOnly()" title="Klik untuk menampilkan hanya faktur yang belum dihitung profitnya"></div>
+                <div id="pumSumProfitNote" style="display:none; font-size:8px; color:rgba(255,255,255,0.85); font-weight:600;"></div>
             </div>
         </div>
         <div class="filter-bar">
@@ -1059,7 +1059,7 @@
             <div class="field"><label>Tanggal</label><input type="date" id="piutangUangMasukTanggal"></div>
             <div class="field"><label>Bulan</label><select id="piutangUangMasukBulan"><option value="">Semua</option></select></div>
             <div class="field"><label>Sales</label><select id="piutangUangMasukSales"><option value="">Semua</option></select></div>
-            <div class="field"><label>Status</label><select id="piutangUangMasukStatus"><option value="">Semua</option><option value="lunas">✅ Sudah Lunas</option><option value="titip">🟠 Titip/Belum Lunas</option><option value="belum_hitung">❓ Profit Belum Dihitung</option></select></div>
+            <div class="field"><label>Status</label><select id="piutangUangMasukStatus"><option value="">Semua</option><option value="lunas">✅ Sudah Lunas</option><option value="titip">🟠 Titip/Belum Lunas</option></select></div>
             <div class="field" style="justify-content:flex-end;"><label>&nbsp;</label><button class="btn btn-reset" id="piutangUangMasukBtnReset">↺ Reset</button></div>
             <div class="field" style="justify-content:flex-end;"><label>&nbsp;</label><button class="btn" id="piutangUangMasukBtnRefresh">🔄 Muat Ulang</button></div>
             <div class="field" style="justify-content:flex-end;"><label>&nbsp;</label><button class="btn btn-outline" id="piutangUangMasukViewToggle">🗂️ Mode Kartu</button></div>
@@ -1078,14 +1078,14 @@
                         <th>PRODUK</th>
                         <th class="num">JUMLAH</th>
                         <th>SATUAN</th>
+                        <th class="num">TOTAL TAGIHAN</th>
+                        <th class="num">SISA TAGIHAN</th>
                         <th>JATUH TEMPO</th>
                         <th>STATUS</th>
-                        <th class="num">TOTAL TAGIHAN</th>
-                        <th class="num">BAYAR</th>
-                        <th class="num">SISA TAGIHAN</th>
-                        <th style="cursor:pointer;" onclick="pumToggleSortTglBayar()" title="Klik untuk urutkan berdasarkan Tgl Bayar">TGL BAYAR <span id="pumSortTglBayarIcon">⇅</span></th>
+                        <th>TGL BAYAR</th>
+                        <th class="num">TOTAL DIBAYAR</th>
                         <th class="num">PROFIT</th>
-                        <th>KET</th>
+                        <th>KETERANGAN</th>
                     </tr>
                 </thead>
                 <tbody id="piutangUangMasukBody"><tr><td colspan="17" class="empty-msg">📂 Tidak ada data piutang tempo dari Data Uang Masuk.</td></tr></tbody>
@@ -2854,28 +2854,12 @@
             if(sales && d.sales!==sales) return false;
             if(status==='lunas' && d.statusClass!=='lunas') return false;
             if(status==='titip' && d.statusClass==='lunas') return false;
-            if(status==='belum_hitung' && !(d.profit===''||d.profit==null)) return false;
             return true;
         });
         // Saat filter Status = Sudah Lunas, urutkan berdasarkan TGL BAYAR asli supaya kolom itu
         // tampil kronologis/berurutan (di luar filter ini, urutan tetap ikuti tanggal transaksi).
-        if(pumTglBayarSort==='asc'){ hasil=hasil.slice().sort((a,b)=>pumSortTglBayar(a)-pumSortTglBayar(b)); }
-        else if(pumTglBayarSort==='desc'){ hasil=hasil.slice().sort((a,b)=>pumSortTglBayar(b)-pumSortTglBayar(a)); }
-        else if(status==='lunas'){ hasil=hasil.slice().sort((a,b)=>pumSortTglBayar(a)-pumSortTglBayar(b)); }
+        if(status==='lunas'){ hasil=hasil.slice().sort((a,b)=>pumSortTglBayar(a)-pumSortTglBayar(b)); }
         return hasil;
-    }
-    let pumTglBayarSort=null; // null | 'asc' | 'desc' - diatur lewat klik header TGL BAYAR
-    function pumToggleSortTglBayar(){
-        pumTglBayarSort = pumTglBayarSort===null?'asc':(pumTglBayarSort==='asc'?'desc':null);
-        piutangUangMasukPage=1;
-        renderPiutangUangMasuk();
-    }
-    function pumShowMissingProfitOnly(){
-        document.getElementById('piutangUangMasukStatus').value='belum_hitung';
-        piutangUangMasukPage=1;
-        renderPiutangUangMasuk();
-        const wrap=document.getElementById('piutangUangMasukTableWrap');
-        if(wrap) wrap.scrollIntoView({behavior:'smooth', block:'start'});
     }
 
     function getFilteredCashDroppingUangMasuk() {
@@ -2975,8 +2959,6 @@
         const filtered=getFilteredPiutangUangMasuk();
         pumRenderSummaryCards(filtered);
         pumApplyViewModeUI();
-        const sortIcon=document.getElementById('pumSortTglBayarIcon');
-        if(sortIcon) sortIcon.textContent = pumTglBayarSort==='asc'?'↑':(pumTglBayarSort==='desc'?'↓':'⇅');
         const totalPages=Math.max(1,Math.ceil(filtered.length/UANG_MASUK_ROWS_PER_PAGE));
         if(piutangUangMasukPage>totalPages) piutangUangMasukPage=totalPages;
         if(piutangUangMasukPage<1) piutangUangMasukPage=1;
@@ -3005,12 +2987,12 @@
                 <td style="font-weight:600;">${escapeHtml(it.produk||'-')}</td>
                 <td class="num">${it.qty!==''&&it.qty!=null?it.qty:'-'}</td>
                 <td>${it.satuan||'-'}</td>
+                <td class="num">${isFirst?fmtRp(d.tagihan):''}</td>
+                <td class="num" style="${d.sisaTagihan>0.5?'color:#b91c1c;font-weight:700;':''}">${isFirst?fmtRp(d.sisaTagihan):''}</td>
                 <td>${isFirst?(d.jatuhTempo||'-')+(d.overdueDays!=null?` <span style="color:#b91c1c;font-weight:700;">(${d.overdueDays} hr)</span>`:''):''}</td>
                 <td>${isFirst?statusBadge:''}</td>
-                <td class="num">${isFirst?fmtRp(d.tagihan):''}</td>
-                <td class="num">${isFirst?fmtRp(d.totalBayar):''}</td>
-                <td class="num" style="${d.sisaTagihan>0.5?'color:#b91c1c;font-weight:700;':''}">${isFirst?fmtRp(d.sisaTagihan):''}</td>
                 <td>${isFirst?(d.tglBayar||'-'):''}</td>
+                <td class="num">${isFirst?fmtRp(d.totalBayar):''}</td>
                 <td class="num">${isFirst?profitCell:''}</td>
                 <td>${isFirst?(d.ket||'-'):''}</td>
             </tr>`;
@@ -3215,7 +3197,7 @@
     // Event listeners Tab 9
     document.getElementById('piutangUangMasukBtnRefresh').addEventListener('click', function(){ refreshPiutangUangMasuk(); showToast('🔄 Data Piutang Tempo & Cash Dropping dimuat ulang.','success'); });
     document.getElementById('piutangUangMasukBtnReset').addEventListener('click', function(){
-        document.getElementById('piutangUangMasukSearch').value=''; document.getElementById('piutangUangMasukTanggal').value=''; document.getElementById('piutangUangMasukBulan').value=''; document.getElementById('piutangUangMasukSales').value=''; document.getElementById('piutangUangMasukStatus').value=''; pumTglBayarSort=null; piutangUangMasukPage=1; renderPiutangUangMasuk();
+        document.getElementById('piutangUangMasukSearch').value=''; document.getElementById('piutangUangMasukTanggal').value=''; document.getElementById('piutangUangMasukBulan').value=''; document.getElementById('piutangUangMasukSales').value=''; document.getElementById('piutangUangMasukStatus').value=''; piutangUangMasukPage=1; renderPiutangUangMasuk();
     });
     document.getElementById('piutangUangMasukPrevPage').addEventListener('click', function(){ if(piutangUangMasukPage>1){ piutangUangMasukPage--; renderPiutangUangMasuk(); } });
     document.getElementById('piutangUangMasukNextPage').addEventListener('click', function(){ const total=getFilteredPiutangUangMasuk().length; const totalPages=Math.max(1,Math.ceil(total/UANG_MASUK_ROWS_PER_PAGE)); if(piutangUangMasukPage<totalPages){ piutangUangMasukPage++; renderPiutangUangMasuk(); } });

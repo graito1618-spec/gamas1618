@@ -14,8 +14,6 @@
     <link rel="apple-touch-icon" href="./icon-192.png">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 100 100&#39;%3E%3Crect width=&#39;100&#39; height=&#39;100&#39; rx=&#39;20&#39; fill=&#39;%232d3748&#39;/%3E%3Crect x=&#39;22&#39; y=&#39;55&#39; width=&#39;14&#39; height=&#39;28&#39; rx=&#39;3&#39; fill=&#39;%23f59e0b&#39;/%3E%3Crect x=&#39;43&#39; y=&#39;38&#39; width=&#39;14&#39; height=&#39;45&#39; rx=&#39;3&#39; fill=&#39;%233b82f6&#39;/%3E%3Crect x=&#39;64&#39; y=&#39;22&#39; width=&#39;14&#39; height=&#39;61&#39; rx=&#39;3&#39; fill=&#39;%2310b981&#39;/%3E%3C/svg%3E">
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',-apple-system,Arial,sans-serif; }
@@ -96,13 +94,6 @@
         .table-wrap tbody tr:nth-child(even) td { background:#f8fafc; }
         .table-wrap tbody tr:hover td { background:#f0f4ff; }
         .table-wrap td.num, .table-wrap th.num { text-align:right; }
-        .cash-table-wrap { overflow-x:auto; overflow-y:auto; max-height:65vh; border:1px solid #d1d5db; border-radius:var(--radius); background:#fff; box-shadow:var(--shadow); }
-        .cash-table-wrap table { width:100%; border-collapse:separate; border-spacing:0; font-size:0.65rem; min-width:480px; border-radius:12px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.08); }
-        .cash-table-wrap th { position:sticky; top:0; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:#ffffff; text-align:left; padding:12px 8px; font-size:0.6rem; text-transform:uppercase; letter-spacing:0.5px; border-right:1px solid rgba(255,255,255,0.1); white-space:nowrap; font-weight:700; z-index:5; border:none; }
-        .cash-table-wrap td { padding:10px 8px; border-bottom:1px solid #e8ecf4; white-space:nowrap; font-size:0.65rem; background:#fafbfc; transition:all 0.2s ease; }
-        .cash-table-wrap tbody tr:nth-child(even) td { background:#f8fafc; }
-        .cash-table-wrap tbody tr:hover td { background:#f0f4ff; }
-        .cash-table-wrap td.num, .cash-table-wrap th.num { text-align:right; }
         .empty-msg { padding:16px; text-align:center; color:#6b7280; font-size:11px; background:#fafbfc; }
         
         .pagination { display:flex; justify-content:space-between; align-items:center; padding:12px 16px; font-size:10px; flex-wrap:wrap; gap:8px; background:linear-gradient(to right,#f8fafc,#f0f4ff); border-radius:0 0 12px 12px; border:1px solid #e8ecf4; border-top:none; box-shadow:0 -2px 8px rgba(0,0,0,0.04); margin-top:-1px; }
@@ -132,6 +123,32 @@
         .modal-close { background:rgba(255,255,255,0.15); border:none; color:#fff; width:26px; height:26px; border-radius:50%; cursor:pointer; font-size:15px; line-height:1; transition:background 0.15s; }
         .modal-close:hover { background:rgba(255,255,255,0.3); }
         .modal-body { padding:8px 14px; overflow-y:auto; flex:1; }
+
+        /* ===== MODAL DETAIL FAKTUR (Tab Data Uang Masuk) — tata letak diperbaiki ===== */
+        #fakturModalTab1 .modal-box { max-width:1180px; }
+        #fakturModalTab1 .modal-tabs { display:flex; gap:6px; padding:10px 14px 0 14px; background:#f8fafc; border-bottom:1px solid #e2e8f0; flex-shrink:0; }
+        #fakturModalTab1 .modal-tab { padding:8px 16px; border:1px solid #e2e8f0; border-bottom:none; border-radius:8px 8px 0 0; background:#eef1f8; color:#64748b; font-weight:700; font-size:11px; cursor:pointer; transition:all 0.15s ease; position:relative; top:1px; }
+        #fakturModalTab1 .modal-tab:hover { background:#e2e8f5; color:#4c51bf; }
+        #fakturModalTab1 .modal-tab.active { background:#fff; color:#4c51bf; border-color:#e2e8f0; border-bottom:1px solid #fff; }
+        #fakturModalTab1 .modal-toolbar { display:flex; align-items:center; gap:10px; padding:10px 2px 12px 2px; flex-wrap:wrap; }
+        #fakturModalTab1 #fakturSearchTab1 { flex:1; min-width:220px; padding:8px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:11px; background:#fff; }
+        #fakturModalTab1 #fakturSearchTab1:focus { outline:none; border-color:#764ba2; box-shadow:0 0 0 3px rgba(118,75,162,0.12); }
+        #fakturModalTab1 .modal-summary { background:linear-gradient(135deg,rgba(102,126,234,0.1) 0%,rgba(118,75,162,0.05) 100%); color:#4c51bf; padding:6px 14px; border-radius:20px; font-weight:700; font-size:10px; white-space:nowrap; border:1px solid rgba(102,126,234,0.2); }
+        .faktur-table-wrapper { overflow:auto; max-height:56vh; border:1px solid #e2e8f0; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.06); }
+        .faktur-table-wrapper table { width:100%; border-collapse:separate; border-spacing:0; font-size:11px; min-width:820px; }
+        .faktur-table-wrapper thead th { position:sticky; top:0; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:#fff; text-align:left; padding:10px 10px; font-size:10px; text-transform:uppercase; letter-spacing:0.4px; font-weight:700; white-space:nowrap; border-right:1px solid rgba(255,255,255,0.12); z-index:5; }
+        .faktur-table-wrapper thead th:last-child { border-right:none; }
+        .faktur-table-wrapper th.center, .faktur-table-wrapper td.center { text-align:center; }
+        .faktur-table-wrapper th.num, .faktur-table-wrapper td.num { text-align:right; }
+        .faktur-table-wrapper tbody td { padding:8px 10px; border-bottom:1px solid #edf0f7; white-space:nowrap; background:#fff; color:#1f2937; }
+        .faktur-table-wrapper tbody tr:nth-child(even) td { background:#f8fafc; }
+        .faktur-table-wrapper tbody tr:hover td { background:#f0f4ff; }
+        .faktur-table-wrapper tbody td:nth-child(3) { font-weight:700; color:#4c51bf; }
+        .faktur-table-wrapper .ket-badge { display:inline-block; padding:3px 9px; border-radius:12px; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.3px; white-space:nowrap; }
+        .faktur-table-wrapper .ket-badge.lunas { background:rgba(16,185,129,0.15); color:#059669; border:1px solid rgba(16,185,129,0.3); }
+        .faktur-table-wrapper .ket-badge.titip { background:rgba(245,158,11,0.15); color:#d97706; border:1px solid rgba(245,158,11,0.3); }
+        .faktur-table-wrapper .ket-badge.lain { background:rgba(102,126,234,0.12); color:#4c51bf; border:1px solid rgba(102,126,234,0.25); }
+        .faktur-table-wrapper tr.faktur-total-row td { font-weight:700; background:#eef1fb !important; border-top:2px solid #94a3b8; color:#1f2937; }
         
         /* TAB 9 & 10 – PIUTANG TEMPO & CASH DROPPING dari Data Uang Masuk */
         #tab9 .table-wrap table, #tab10 .table-wrap table { font-size:0.6rem; min-width:900px; }
@@ -140,6 +157,27 @@
         #tab9 .table-wrap tbody tr:nth-child(even) td, #tab10 .table-wrap tbody tr:nth-child(even) td { background:#f8fafc; }
         #tab9 .table-wrap tbody tr:hover td, #tab10 .table-wrap tbody tr:hover td { background:#f0f4ff; }
         #tab9 .table-wrap td.num, #tab10 .table-wrap td.num { text-align:right; }
+        .faktur-link { color:#4c51bf; font-weight:700; cursor:pointer; text-decoration:underline dotted; }
+        .faktur-link:hover { color:#764ba2; text-decoration:underline solid; }
+        #pumDetailModal .pum-section-title { font-weight:700; font-size:11px; color:#1f2937; margin:10px 0 6px 0; padding-bottom:4px; border-bottom:1px solid #e2e8f0; }
+        #pumDetailModal .pum-grid { display:grid; grid-template-columns:1fr 1fr; gap:4px 14px; font-size:11px; }
+        #pumDetailModal .pum-grid > div { padding:2px 0; }
+        #pumDetailModal table.pum-profit-table { width:100%; border-collapse:collapse; font-size:10.5px; margin-top:4px; min-width:760px; }
+        #pumDetailModal table.pum-profit-table th { background:#eef2ff; color:#4338ca; padding:5px 7px; text-align:left; border:1px solid #e0e4f5; white-space:nowrap; }
+        #pumDetailModal table.pum-profit-table td { padding:5px 7px; border:1px solid #e8ecf4; white-space:nowrap; }
+        #pumDetailModal table.pum-profit-table td.num, #pumDetailModal table.pum-profit-table th.num { text-align:right; }
+        #pumDetailModal .pum-formula-box { background:#f8fafc; border:1px dashed #c7d2fe; border-radius:8px; padding:8px 12px; margin-top:8px; font-size:11px; line-height:1.7; }
+        #pumDetailModal .pum-warn-box { background:#fef3c7; border:1px solid #f59e0b; border-radius:8px; padding:8px 12px; margin-top:8px; font-size:10.5px; color:#92400e; }
+        .pt-card-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:10px; max-height:450px; overflow-y:auto; padding:2px; }
+        .pt-card-item { background:#fff; border:1px solid #e2e8f0; border-left:4px solid #667eea; border-radius:10px; padding:10px 12px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:5px; cursor:pointer; transition:all 0.15s ease; }
+        .pt-card-item:hover { box-shadow:0 4px 14px rgba(102,126,234,0.2); transform:translateY(-2px); }
+        .pt-card-item.pt-card-overdue { border-left-color:#dc2626; }
+        .pt-card-top { display:flex; justify-content:space-between; align-items:center; gap:6px; margin-bottom:2px; }
+        .pt-card-top .faktur-link { font-size:11px; }
+        .pt-card-row { display:flex; justify-content:space-between; gap:8px; font-size:10px; color:#64748b; }
+        .pt-card-row span:last-child { font-weight:600; color:#1e293b; text-align:right; }
+        .pt-card-row.highlight { border-top:1px dashed #e2e8f0; padding-top:5px; margin-top:2px; font-size:10.5px; }
+        .pt-card-row.highlight span:first-child { font-weight:700; color:#4c51bf; }
         
         .toolbar { background:#fff; border:1px solid #d1d5db; border-radius:var(--radius); padding:6px 12px; margin-bottom:8px; box-shadow:var(--shadow); display:flex; flex-wrap:wrap; align-items:center; gap:6px 12px; min-height:40px; }
         .toolbar-left { display:flex; align-items:center; gap:4px 8px; flex-wrap:wrap; }
@@ -182,8 +220,7 @@
         #tab7 .table-responsive { max-height:300px; overflow:auto !important; border:1px solid #dee2e6; border-radius:4px; margin:3px 4px; -webkit-overflow-scrolling:touch; }
         #tab7 .table { font-size:0.65rem !important; border-collapse:collapse; width:100%; min-width:800px; margin:0; }
         #tab7 .table th, #tab7 .table td { border:1px solid #a0a0a0; padding:2px 3px !important; vertical-align:middle; white-space:nowrap; }
-        #tab7 .table thead { position:sticky; top:0; z-index:5; }
-        #tab7 .table th { background:#d9e1f2; font-weight:600; font-size:0.6rem !important; text-align:center; padding:2px 3px !important; }
+        #tab7 .table th { background:#d9e1f2; font-weight:600; font-size:0.6rem !important; text-align:center; position:sticky; top:0; z-index:5; padding:2px 3px !important; }
         #tab7 .table .form-control-sm { padding:0 2px !important; font-size:0.6rem !important; height:20px !important; border-radius:0; border:1px solid #bfbfbf; background:#fff; width:100%; min-width:35px; max-width:80px; }
         #tab7 .table .form-control-sm[readonly] { background:#f1f3f4; }
         #tab7 .table .total-input { font-weight:700; background:#f1f3f4 !important; }
@@ -990,16 +1027,45 @@
 
     <!-- ======= TAB 9 – PIUTANG TEMPO (Dari Data Uang Masuk) ======= -->
     <div class="tab-content" id="tab9">
+        <div class="cards" id="piutangUangMasukSummaryCards" style="margin-bottom:10px;">
+            <div class="card" style="min-width:130px;">
+                <div class="label">Periode</div>
+                <div class="value" id="pumSumPeriode" style="font-size:12px;">Semua Periode</div>
+            </div>
+            <div class="card" style="min-width:110px; display:none;">
+                <div class="label">Jumlah Faktur</div>
+                <div class="value" id="pumSumCountFaktur">0 faktur</div>
+            </div>
+            <div class="card" style="min-width:150px;">
+                <div class="label">Nilai Faktur Piutang Tempo</div>
+                <div class="value" id="pumSumTagihan">Rp 0</div>
+            </div>
+            <div class="card" style="min-width:150px;">
+                <div class="label">Total Uang Masuk Piutang Tempo</div>
+                <div class="value" id="pumSumDibayar">Rp 0</div>
+            </div>
+            <div class="card" style="min-width:130px; display:none;">
+                <div class="label">Sisa Tagihan</div>
+                <div class="value" id="pumSumSisa">Rp 0</div>
+            </div>
+            <div class="card" style="min-width:150px;">
+                <div class="label">🔶 Total Profit Real</div>
+                <div class="value" id="pumSumProfit">Rp 0</div>
+                <div id="pumSumProfitNote" style="display:none; font-size:8px; color:rgba(255,255,255,0.85); font-weight:600;"></div>
+            </div>
+        </div>
         <div class="filter-bar">
             <div class="field" style="min-width:150px;"><label>Cari Faktur/Customer</label><input type="text" id="piutangUangMasukSearch" placeholder="No faktur / nama toko..."></div>
             <div class="field"><label>Tanggal</label><input type="date" id="piutangUangMasukTanggal"></div>
             <div class="field"><label>Bulan</label><select id="piutangUangMasukBulan"><option value="">Semua</option></select></div>
             <div class="field"><label>Sales</label><select id="piutangUangMasukSales"><option value="">Semua</option></select></div>
+            <div class="field"><label>Status</label><select id="piutangUangMasukStatus"><option value="">Semua</option><option value="lunas">✅ Sudah Lunas</option><option value="titip">🟠 Titip/Belum Lunas</option></select></div>
             <div class="field" style="justify-content:flex-end;"><label>&nbsp;</label><button class="btn btn-reset" id="piutangUangMasukBtnReset">↺ Reset</button></div>
             <div class="field" style="justify-content:flex-end;"><label>&nbsp;</label><button class="btn" id="piutangUangMasukBtnRefresh">🔄 Muat Ulang</button></div>
+            <div class="field" style="justify-content:flex-end;"><label>&nbsp;</label><button class="btn btn-outline" id="piutangUangMasukViewToggle">🗂️ Mode Kartu</button></div>
             <span class="info-right" id="piutangUangMasukInfo">0 data</span>
         </div>
-        <div class="table-wrap" style="height:450px; max-height:450px;">
+        <div class="table-wrap" id="piutangUangMasukTableWrap" style="height:450px; max-height:450px;">
             <table>
                 <thead>
                     <tr>
@@ -1010,6 +1076,8 @@
                         <th>SALES</th>
                         <th>KATEGORI</th>
                         <th>PRODUK</th>
+                        <th class="num">JUMLAH</th>
+                        <th>SATUAN</th>
                         <th class="num">TOTAL TAGIHAN</th>
                         <th class="num">SISA TAGIHAN</th>
                         <th>JATUH TEMPO</th>
@@ -1020,9 +1088,10 @@
                         <th>KETERANGAN</th>
                     </tr>
                 </thead>
-                <tbody id="piutangUangMasukBody"><tr><td colspan="15" class="empty-msg">📂 Tidak ada data piutang tempo dari Data Uang Masuk.</td></tr></tbody>
+                <tbody id="piutangUangMasukBody"><tr><td colspan="17" class="empty-msg">📂 Tidak ada data piutang tempo dari Data Uang Masuk.</td></tr></tbody>
             </table>
         </div>
+        <div class="pt-card-list" id="piutangUangMasukCardList" style="display:none;"></div>
         <div class="pagination" id="piutangUangMasukPager">
             <div><button id="piutangUangMasukPrevPage" disabled>◀ Sebelumnya</button><span id="piutangUangMasukPageLabel">Halaman 1 dari 1</span><button id="piutangUangMasukNextPage" disabled>Berikutnya ▶</button></div>
             <div><span class="badge-count" id="piutangUangMasukTotalData">0 data</span></div>
@@ -1031,6 +1100,33 @@
 
     <!-- ======= TAB 10 – CASH DROPPING (Dari Data Uang Masuk) ======= -->
     <div class="tab-content" id="tab10">
+        <div class="cards" id="cashDroppingUangMasukSummaryCards" style="margin-bottom:10px;">
+            <div class="card" style="min-width:130px;">
+                <div class="label">Periode</div>
+                <div class="value" id="cddSumPeriode" style="font-size:12px;">Semua Periode</div>
+            </div>
+            <div class="card" style="min-width:110px;">
+                <div class="label">Jumlah Faktur</div>
+                <div class="value" id="cddSumCountFaktur">0 faktur</div>
+            </div>
+            <div class="card" style="min-width:130px;">
+                <div class="label">Total Nominal</div>
+                <div class="value" id="cddSumTagihan">Rp 0</div>
+            </div>
+            <div class="card" style="min-width:130px;">
+                <div class="label">Total Cash</div>
+                <div class="value" id="cddSumCash">Rp 0</div>
+            </div>
+            <div class="card" style="min-width:130px;">
+                <div class="label">Total Transfer</div>
+                <div class="value" id="cddSumTransfer">Rp 0</div>
+            </div>
+            <div class="card" style="min-width:150px;">
+                <div class="label">💰 Total Profit Real</div>
+                <div class="value" id="cddSumProfit">Rp 0</div>
+                <div id="cddSumProfitNote" style="display:none; font-size:8px; color:rgba(255,255,255,0.85); font-weight:600;"></div>
+            </div>
+        </div>
         <div class="filter-bar">
             <div class="field" style="min-width:150px;"><label>Cari Faktur/Customer</label><input type="text" id="cashDroppingUangMasukSearch" placeholder="No faktur / nama toko..."></div>
             <div class="field"><label>Tanggal</label><input type="date" id="cashDroppingUangMasukTanggal"></div>
@@ -1038,9 +1134,10 @@
             <div class="field"><label>Sales</label><select id="cashDroppingUangMasukSales"><option value="">Semua</option></select></div>
             <div class="field" style="justify-content:flex-end;"><label>&nbsp;</label><button class="btn btn-reset" id="cashDroppingUangMasukBtnReset">↺ Reset</button></div>
             <div class="field" style="justify-content:flex-end;"><label>&nbsp;</label><button class="btn" id="cashDroppingUangMasukBtnRefresh">🔄 Muat Ulang</button></div>
+            <div class="field" style="justify-content:flex-end;"><label>&nbsp;</label><button class="btn btn-outline" id="cashDroppingUangMasukViewToggle">🗂️ Mode Kartu</button></div>
             <span class="info-right" id="cashDroppingUangMasukInfo">0 data</span>
         </div>
-        <div class="table-wrap" style="height:450px; max-height:450px;">
+        <div class="table-wrap" id="cashDroppingUangMasukTableWrap" style="height:450px; max-height:450px;">
             <table>
                 <thead>
                     <tr>
@@ -1054,12 +1151,15 @@
                         <th class="num">Nominal</th>
                         <th class="num">Bayar Cash</th>
                         <th class="num">Bayar Transfer</th>
+                        <th>Tgl Bayar</th>
+                        <th class="num">Profit</th>
                         <th>Keterangan</th>
                     </tr>
                 </thead>
-                <tbody id="cashDroppingUangMasukBody"><tr><td colspan="11" class="empty-msg">📂 Tidak ada data cash dropping dari Data Uang Masuk.</td></tr></tbody>
+                <tbody id="cashDroppingUangMasukBody"><tr><td colspan="13" class="empty-msg">📂 Tidak ada data cash dropping dari Data Uang Masuk.</td></tr></tbody>
             </table>
         </div>
+        <div class="pt-card-list" id="cashDroppingUangMasukCardList" style="display:none;"></div>
         <div class="pagination" id="cashDroppingUangMasukPager">
             <div><button id="cashDroppingUangMasukPrevPage" disabled>◀ Sebelumnya</button><span id="cashDroppingUangMasukPageLabel">Halaman 1 dari 1</span><button id="cashDroppingUangMasukNextPage" disabled>Berikutnya ▶</button></div>
             <div><span class="badge-count" id="cashDroppingUangMasukTotalData">0 data</span></div>
@@ -1100,6 +1200,12 @@
             <div class="modal-body" id="ptDetailBody" style="font-size:11px; line-height:1.9;"></div>
         </div>
     </div>
+    <div class="modal-overlay" id="pumDetailModal">
+        <div class="modal-box">
+            <div class="modal-head"><h2 id="pumDetailTitle">🧾 Detail Faktur</h2><button class="modal-close" id="pumDetailClose">✕</button></div>
+            <div class="modal-body" id="pumDetailBody" style="font-size:11px; line-height:1.7;"></div>
+        </div>
+    </div>
     <div class="modal-overlay" id="ptInputManualModal">
         <div class="modal-box">
             <div class="modal-head"><h2>✍️ Input Manual - Piutang Lama</h2><button class="modal-close" id="ptInputManualClose">✕</button></div>
@@ -1134,6 +1240,10 @@
     // UTILITY
     // ================================================================
     function fmtRp(n) { n = Math.round(parseNumber(n) || 0); return 'Rp ' + n.toLocaleString('id-ID'); }
+    // Profit yang belum dibayar (barang masih titip/stok) BUKAN kerugian, jadi Profit tidak pernah
+    // ditampilkan minus di layar manapun — nilai negatif ditahan jadi 0 saat ditampilkan (nilai asli
+    // tetap dipakai untuk perhitungan internal lain seperti Sisa Modal Tertahan).
+    function clampProfit(v) { if(v===''||v==null||isNaN(v)) return v; return Math.max(0, v); }
     function fmtNumOnly(n) { n = Math.round(parseNumber(n) || 0); return n ? n.toLocaleString('id-ID') : ''; }
     function parseNumber(v) {
         if (v === null || v === undefined || v === '') return 0;
@@ -1219,7 +1329,7 @@
     }
 
     // ================================================================
-    // DATABASE (IndexedDB + Firestore)
+    // DATABASE (IndexedDB — lokal saja)
     // ================================================================
     let AUTH_EXPIRED = false;
     const IDB_NAME = 'GajahMas2026DB';
@@ -1277,97 +1387,18 @@
         }
     }
 
-    // Firestore config
-    const firebaseConfig = {
-        apiKey: "AIzaSyARRCFuSvo4YIiVwAE9xJN7pDcucT_Qjx4",
-        authDomain: "gajahmas2026.firebaseapp.com",
-        projectId: "gajahmas2026",
-        storageBucket: "gajahmas2026.firebasestorage.app",
-        messagingSenderId: "688940774016",
-        appId: "1:688940774016:web:e50de185ff33320bb96c65"
-    };
-    function bersihkanUntukFirestore(value) {
-        if (value===undefined || value===null) return null;
-        if (value instanceof Date) return value;
-        if (Array.isArray(value)) { return value.map(v => (v===undefined ? null : bersihkanUntukFirestore(v))); }
-        if (typeof value==='object') { const out={}; Object.keys(value).forEach(k => { const v=value[k]; if (v===undefined) return; out[k]=bersihkanUntukFirestore(v); }); return out; }
-        return value;
-    }
-    function pesanErrorFirestore(e, konteks) {
-        const kode = e && e.code ? e.code : '';
-        let sebab = e && e.message ? e.message : String(e);
-        if (kode==='permission-denied') sebab='Akses ditolak (cek Firestore Security Rules).';
-        else if (kode==='unavailable') sebab='Tidak bisa menghubungi server (cek koneksi internet).';
-        else if (kode==='unauthenticated') sebab='Sesi tidak terautentikasi.';
-        return 'Gagal ' + konteks + ': ' + sebab;
-    }
-    let fsdb=null, firestoreSiap=false;
-    try {
-        if (typeof firebase !== 'undefined') {
-            firebase.initializeApp(firebaseConfig);
-            fsdb = firebase.firestore();
-            fsdb.enablePersistence({ synchronizeTabs:true }).catch(function(err){ console.warn('Firestore offline persistence tidak aktif:', err && err.code); });
-            firestoreSiap = true;
-        } else { console.error('SDK Firebase tidak termuat.'); }
-    } catch(e) { console.error('Gagal inisialisasi Firebase:', e); firestoreSiap=false; }
-
-    class FirestoreTable {
-        constructor(name) { this.name=name; this.col=fsdb.collection(name); }
-        async add(obj) { try { const ref=await this.col.add(bersihkanUntukFirestore(obj)); return ref.id; } catch(e) { throw new Error(pesanErrorFirestore(e,'menyimpan data ('+this.name+')')); } }
-        async bulkAdd(arr) { if (!arr || arr.length===0) return; try { for (let i=0; i<arr.length; i+=450) { const batch=fsdb.batch(); arr.slice(i,i+450).forEach(item=>{ batch.set(this.col.doc(), bersihkanUntukFirestore(item)); }); await batch.commit(); } } catch(e) { throw new Error(pesanErrorFirestore(e,'menyimpan banyak data ('+this.name+')')); } }
-        async toArray() { try { const snap=await this.col.get({source:'server'}); return snap.docs.map(d=>Object.assign({id:d.id},d.data())); } catch(e) { throw new Error(pesanErrorFirestore(e,'membaca data ('+this.name+')')); } }
-        async count() { try { const snap=await this.col.get({source:'server'}); return snap.size; } catch(e) { throw new Error(pesanErrorFirestore(e,'menghitung data ('+this.name+')')); } }
-        async clear() { try { const snap=await this.col.get({source:'server'}); const docs=snap.docs; for (let i=0; i<docs.length; i+=450) { const batch=fsdb.batch(); docs.slice(i,i+450).forEach(d=>batch.delete(d.ref)); await batch.commit(); } } catch(e) { throw new Error(pesanErrorFirestore(e,'mengosongkan data ('+this.name+')')); } }
-        async delete(id) { try { await this.col.doc(String(id)).delete(); } catch(e) { throw new Error(pesanErrorFirestore(e,'menghapus data ('+this.name+')')); } }
-        async update(id, changes) { try { await this.col.doc(String(id)).set(bersihkanUntukFirestore(changes),{merge:true}); } catch(e) { throw new Error(pesanErrorFirestore(e,'memperbarui data ('+this.name+')')); } }
-        // PENTING: method ini untuk menyisipkan/mengganti SATU HARI ke dalam dokumen bulan,
-        // memakai Firestore transaction supaya baca+gabung+tulis jadi ATOMIK. Ini mencegah
-        // race condition dengan proses simpan lain (mis. import/edit tabel Data Uang Masuk)
-        // yang menulis ke dokumen bulan yang sama di waktu yang berdekatan — sebelumnya pola
-        // baca-lalu-tulis terpisah bisa membuat versi lama menang cuma karena timestamp-nya
-        // kebetulan lebih baru, walau datanya lebih basi (menyebabkan hari yang baru diinput
-        // hilang lagi setelah pindah dashboard/reload).
-        async mergeSingleDay(bulan, dayRecord) {
-            try {
-                const q = await this.col.where('bulan', '==', bulan).get({ source: 'server' });
-                if (q.empty) {
-                    await this.col.add(bersihkanUntukFirestore({ bulan, data: [dayRecord], tanggal: new Date().toISOString() }));
-                    return;
-                }
-                let docs = q.docs;
-                if (docs.length > 1) docs = docs.slice().sort((a,b)=>String((b.data().tanggal)||'').localeCompare(String((a.data().tanggal)||'')));
-                const ref = docs[0].ref;
-                await fsdb.runTransaction(async (tx) => {
-                    const snap = await tx.get(ref); // baca ULANG di dalam transaksi = data paling mutakhir
-                    const current = snap.exists ? (snap.data().data || []) : [];
-                    const idx = current.findIndex(d => d.tanggal === dayRecord.tanggal);
-                    if (idx >= 0) current[idx] = dayRecord; else current.push(dayRecord);
-                    tx.set(ref, bersihkanUntukFirestore({ bulan, data: current, tanggal: new Date().toISOString() }), { merge: false });
-                });
-            } catch (e) {
-                throw new Error(pesanErrorFirestore(e, 'menyimpan data harian (' + this.name + ')'));
-            }
-        }
-        where(field) { return { equals: (value) => ({ first: async () => { try { const snap=await this.col.where(field,'==',value).get({source:'server'}); if (snap.empty) return undefined; let docs=snap.docs.map(d=>Object.assign({id:d.id},d.data())); if (docs.length>1) { docs.sort((a,b)=>String(b.tanggal||'').localeCompare(String(a.tanggal||''))); } return docs[0]; } catch(e) { throw new Error(pesanErrorFirestore(e,'mencari data ('+this.name+')')); } } }) }; }
-        async syncRows(currentRows, docIdMap, snapshotMap) {
-            try {
-                const ops=[]; const stillPresentIds=new Set();
-                currentRows.forEach(row => { const id=docIdMap.get(row); if (!id) { const ref=this.col.doc(); ops.push({type:'add',ref,row,id:ref.id}); } else { stillPresentIds.add(id); const prevJSON=snapshotMap.get(id); const curJSON=JSON.stringify(row); if (prevJSON!==curJSON) { ops.push({type:'update',ref:this.col.doc(id),row,id}); } } });
-                snapshotMap.forEach((_,id) => { if (!stillPresentIds.has(id)) { ops.push({type:'delete',ref:this.col.doc(id),id}); } });
-                for (let i=0; i<ops.length; i+=450) { const batch=fsdb.batch(); ops.slice(i,i+450).forEach(op=>{ if(op.type==='add') batch.set(op.ref, bersihkanUntukFirestore(op.row)); else if(op.type==='update') batch.set(op.ref, bersihkanUntukFirestore(op.row), {merge:false}); else if(op.type==='delete') batch.delete(op.ref); }); await batch.commit(); }
-                ops.forEach(op=>{ if(op.type==='delete') { snapshotMap.delete(op.id); } else { docIdMap.set(op.row, op.id); snapshotMap.set(op.id, JSON.stringify(op.row)); } });
-                return { added:ops.filter(o=>o.type==='add').length, updated:ops.filter(o=>o.type==='update').length, deleted:ops.filter(o=>o.type==='delete').length };
-            } catch(e) { throw new Error(pesanErrorFirestore(e,'menyimpan perubahan ('+this.name+')')); }
-        }
-    }
+    // ================================================================
+    // PENYIMPANAN LOKAL SAJA (IndexedDB via LocalTable di atas).
+    // Firebase/Firestore sudah dihapus — semua data tersimpan di
+    // perangkat ini saja, tidak sinkron ke server/perangkat lain.
+    // ================================================================
     const NAMA_TABEL = ['sales','cashIncome','printHistory','trash','piutangNotes','cashNotes','cetakTagihanMap','inputHarian'];
-    function buatDb(gunakanFirestore) {
+    function buatDb() {
         const obj = { version: function() { return { stores: function() { return { upgrade: function(){} }; } }; }, transaction: async function(mode,table,fn) { return await fn(); } };
-        NAMA_TABEL.forEach(nama => { obj[nama] = gunakanFirestore ? new FirestoreTable(nama) : new LocalTable(nama); });
+        NAMA_TABEL.forEach(nama => { obj[nama] = new LocalTable(nama); });
         return obj;
     }
-    const db = buatDb(firestoreSiap);
-    if (!firestoreSiap) console.warn('Memakai penyimpanan LOKAL (IndexedDB) karena Firestore gagal disiapkan.');
+    const db = buatDb();
 
     // ================================================================
     // STATE GLOBAL
@@ -1498,58 +1529,9 @@
             if (existing) { await db.cashIncome.update(existing.id, { data, tanggal: new Date().toISOString() }); idTersimpan=existing.id; }
             else { idTersimpan = await db.cashIncome.add({ bulan:cashBulan, data, tanggal:new Date().toISOString() }); }
             _cashAllCacheTime = 0; // invalidate cache segera setelah menulis
-            // PENTING: Firestore dengan enablePersistence() akan menganggap penulisan "sukses"
-            // begitu tersimpan di CACHE LOKAL perangkat — belum tentu sudah benar-benar sampai
-            // ke server (misal koneksi ke Firestore sedang terganggu/diblokir, sering terjadi di
-            // mode Incognito/browser privasi). Kalau cache lokal itu nanti dibersihkan/hilang,
-            // data yang tadinya "berhasil" bisa hilang permanen. Maka di sini kita paksa baca
-            // ULANG langsung dari server (bukan cache) untuk memastikan datanya benar-benar
-            // sudah nyampe, sebelum bilang "berhasil" ke user.
-            if (firestoreSiap && idTersimpan) {
-                try {
-                    const snap = await fsdb.collection('cashIncome').doc(String(idTersimpan)).get({ source: 'server' });
-                    if (!snap.exists) {
-                        showToast('⚠️ Data tersimpan di PERANGKAT ini saja, BELUM terkonfirmasi sampai ke server (kemungkinan koneksi ke server bermasalah). Jangan tutup halaman ini dulu — cek koneksi internet, lalu coba Upload ulang.', 'warning');
-                        return false;
-                    }
-                    const dataServer = (snap.data()||{}).data || [];
-                    if (dataServer.length !== data.length) {
-                        console.error('[VERIFY FAIL] Count mismatch: server='+dataServer.length+' vs local='+data.length, {dataServer, data});
-                        showToast('⚠️ Data di server baru '+dataServer.length+' dari '+data.length+' hari — sepertinya koneksi terputus saat menyimpan. Pastikan internet stabil lalu Upload ulang.', 'warning');
-                        return false;
-                    }
-                    
-                    // IMPROVEMENT: Jika ada data, verify sample data (first dan last untuk cek integritas)
-                    if(data.length > 0) {
-                        const firstServer = dataServer[0];
-                        const lastServer = dataServer[dataServer.length-1];
-                        const firstLocal = data[0];
-                        const lastLocal = data[data.length-1];
-                        
-                        const firstMatch = firstServer && firstServer.tanggal === firstLocal.tanggal;
-                        const lastMatch = lastServer && lastServer.tanggal === lastLocal.tanggal;
-                        
-                        if(!firstMatch || !lastMatch) {
-                            console.error('[VERIFY FAIL] Data value mismatch:', {
-                                first: {server: firstServer?.tanggal, local: firstLocal.tanggal, match: firstMatch},
-                                last: {server: lastServer?.tanggal, local: lastLocal.tanggal, match: lastMatch}
-                            });
-                            showToast('⚠️ Data di server berbeda dari yang dikirim (tanggal tidak cocok)! Cek koneksi dan coba lagi.', 'warning');
-                            return false;
-                        }
-                    }
-                    
-                    console.log('[VERIFY OK] Data count='+data.length+' match dengan server');
-                    _cashAllCacheTime = 0; // data berubah di server, cache lokal jadi tidak valid
-                    
-                } catch(verErr) {
-                    showToast('⚠️ Tidak bisa memastikan data sudah sampai ke server ('+(verErr&&verErr.message?verErr.message:verErr)+'). Data BISA JADI baru tersimpan lokal saja — pastikan internet stabil, jangan tutup halaman, lalu cek lagi.', 'warning');
-                    return false;
-                }
-            }
             return true;
         } catch(e) {
-            showToast('❌ GAGAL simpan ke server: '+e.message+' — data baru BELUM tersimpan permanen, jangan pindah tab/dashboard dulu, coba Upload ulang.', 'warning');
+            showToast('❌ GAGAL simpan data: '+e.message+' — data baru BELUM tersimpan, jangan pindah tab/dashboard dulu, coba lagi.', 'warning');
             return false;
         }
     }
@@ -1759,23 +1741,16 @@
         // Step 1: Clear dari memory
         cashDataMap[cashBulan]=[]; 
         
-        // Step 2: Hapus dari Dexie + Firestore (PENTING untuk mencegah data muncul lagi saat refresh)
+        // Step 2: Hapus dari penyimpanan lokal (IndexedDB)
         try {
             const existing = await db.cashIncome.where('bulan').equals(cashBulan).first();
             if (existing) {
-                // Hapus dari Dexie
                 await db.cashIncome.delete(existing.id);
-                console.log('[DELETE] Dihapus dari Dexie: bulan='+cashBulan);
-                
-                // PENTING: Juga hapus dari Firestore supaya tidak muncul lagi saat reload
-                if (firestoreSiap) {
-                    await fsdb.collection('cashIncome').doc(String(existing.id)).delete();
-                    console.log('[DELETE] Dihapus dari Firestore: id='+existing.id+' bulan='+cashBulan);
-                }
+                console.log('[DELETE] Dihapus: bulan='+cashBulan);
             }
         } catch(err) {
             console.error('Delete error:', err);
-            showToast('⚠️ Gagal hapus dari server: '+err.message, 'warning');
+            showToast('⚠️ Gagal hapus data: '+err.message, 'warning');
             return;
         }
         
@@ -1864,9 +1839,13 @@
         filteredList.forEach(d => {
             const alamatBersih=bersihkanTeksAlamat(d.alamat); const tglFakturBersih=formatTanggalExcel(d.tglFaktur); const jtBersih=formatTanggalExcel(d.jt);
             totalTagihan+=parseNumber(d.tagihan); totalBayarCash+=parseNumber(d.bayarCash); totalBayarTransfer+=parseNumber(d.bayarTransfer);
-            html += `<tr><td class="center">${d.no}</td><td>${d.sales}</td><td>${d.noFaktur}</td><td>${d.namaToko}</td><td>${alamatBersih}</td><td>${tglFakturBersih}</td><td>${jtBersih}</td><td class="num">${fmtRp(d.tagihan)}</td><td class="num">${fmtRp(d.bayarCash)}</td><td class="num">${fmtRp(d.bayarTransfer)}</td><td>${d.ket}</td></tr>`;
+            const ketRaw=(d.ket||'').trim();
+            const ketLower=ketRaw.toLowerCase();
+            const ketClass=ketLower==='lunas'?'lunas':(ketLower==='titip'?'titip':'lain');
+            const ketHtml=ketRaw?`<span class="ket-badge ${ketClass}">${escapeHtml(ketRaw)}</span>`:'-';
+            html += `<tr><td class="center">${d.no}</td><td>${d.sales}</td><td>${d.noFaktur}</td><td>${d.namaToko}</td><td>${alamatBersih}</td><td>${tglFakturBersih}</td><td>${jtBersih}</td><td class="num">${fmtRp(d.tagihan)}</td><td class="num">${fmtRp(d.bayarCash)}</td><td class="num">${fmtRp(d.bayarTransfer)}</td><td>${ketHtml}</td></tr>`;
         });
-        html += `<tr style="font-weight:700;background:#f1f5f9;border-top:2px solid #94a3b8;"><td colspan="7" style="text-align:right;padding-right:10px;">TOTAL</td><td class="num">${fmtRp(totalTagihan)}</td><td class="num">${fmtRp(totalBayarCash)}</td><td class="num">${fmtRp(totalBayarTransfer)}</td><td></td></tr>`;
+        html += `<tr class="faktur-total-row"><td colspan="7" style="text-align:right;padding-right:14px;">TOTAL</td><td class="num">${fmtRp(totalTagihan)}</td><td class="num">${fmtRp(totalBayarCash)}</td><td class="num">${fmtRp(totalBayarTransfer)}</td><td></td></tr>`;
         tbody.innerHTML=html;
     }
     document.getElementById('fakturModalCloseTab1').addEventListener('click', tutupFakturModalTab1);
@@ -2536,23 +2515,8 @@
         const penjualanCash=sum(cashDroppingDetail,'bayarCash'); const penjualanTransfer=sum(cashDroppingDetail,'bayarTransfer');
         const totalCash=piutangCash+penjualanCash; const totalTransfer=piutangTransfer+penjualanTransfer; const grandTotal=totalCash+totalTransfer;
         const dayRecord={tanggal:tanggalKey,piutangCash,piutangTransfer,penjualanCash,penjualanTransfer,totalCash,totalTransfer,grandTotal,piutangDetail,cashDroppingDetail};
-        // PENTING: dulu di sini pola baca-lalu-tulis terpisah (baca dari server,
-        // ubah 1 hari, tulis balik SEMUA hari) — ini TIDAK atomik. Kalau ada proses
-        // simpan lain (mis. import/edit tabel Data Uang Masuk) menulis ke dokumen
-        // bulan yang sama di waktu berdekatan, versi yang dibaca di sini bisa basi,
-        // dan tulisan balik yang basi itu malah MENANG karena timestamp-nya kebetulan
-        // lebih baru — akibatnya hari yang baru diinput di tempat lain hilang lagi
-        // setelah pindah dashboard/reload. Sekarang pakai Firestore transaction
-        // (mergeSingleDay) yang baca+gabung+tulis dalam satu operasi atomik, dan
-        // otomatis retry kalau dokumennya berubah di tengah jalan.
-        if (firestoreSiap) {
-            try {
-                await db.cashIncome.mergeSingleDay(bulanKey, dayRecord);
-                _cashAllCacheTime = 0; // invalidate cache biar tampilan sinkron dengan server
-            } catch(e) {
-                showToast('⚠️ Gagal sinkron data harian ke server: '+(e&&e.message?e.message:e), 'warning');
-            }
-        } else {
+        // Simpan/gabung data 1 hari ke dalam dokumen bulan (penyimpanan lokal saja).
+        {
             let list; try { const rec=await db.cashIncome.where('bulan').equals(bulanKey).first(); list=rec?(rec.data||[]):[]; } catch(e){ list=cashDataMap[bulanKey]||[]; }
             const existingIdx=list.findIndex(it=>it.tanggal===tanggalKey); if(existingIdx>=0) list[existingIdx]=dayRecord; else list.push(dayRecord);
             const existing=await db.cashIncome.where('bulan').equals(bulanKey).first();
@@ -2726,35 +2690,60 @@
             salesByFakturRaw.get(key).push(r);
         });
         function agregasiBarisFaktur(rows){
-            const produkSet=new Set(); let hasFitri=false, salesName='', modalTotal=0, modalAda=false;
+            const produkSet=new Set(); let hasFitri=false, salesName='', modalTotal=0, modalAda=false; const items=[];
             rows.forEach(r => {
                 const produkNama=(r.Produk||'').trim();
                 if(produkNama) produkSet.add(produkNama);
                 if(produkNama.toLowerCase().includes('fitri')) hasFitri=true;
                 if(!salesName && (r.Sales||'').trim()) salesName=(r.Sales||'').trim();
                 const hargaBeliRaw=r['Harga Beli'];
+                const qty=parseNumber(r['Jumlah'])||0;
+                const hargaJual=parseNumber(r['Harga Jual'])||0;
+                const satuanNama=(r.Satuan||'').trim();
                 if(hargaBeliRaw!==undefined && hargaBeliRaw!==null && hargaBeliRaw!==''){
                     const hargaBeli=parseNumber(hargaBeliRaw)||0;
-                    const qty=parseNumber(r['Jumlah'])||0;
-                    modalTotal += hargaBeli*qty;
+                    const subtotalModal=hargaBeli*qty;
+                    modalTotal += subtotalModal;
                     modalAda=true;
+                    items.push({produk:produkNama||'-',qty,satuan:satuanNama,hargaBeli,hargaJual,subtotalModal,adaHargaBeli:true});
+                } else {
+                    items.push({produk:produkNama||'-',qty,satuan:satuanNama,hargaBeli:null,hargaJual,subtotalModal:null,adaHargaBeli:false});
                 }
             });
-            return {produkSet,hasFitri,salesName,modalTotal,modalAda};
+            return {produkSet,hasFitri,salesName,modalTotal,modalAda,items};
         }
-        function cariSalesMatch(noFaktur, tglAcuan){
+        function distinctCustomers(rows){
+            const set=new Set();
+            rows.forEach(r => { const c=(r.Customer||'').trim().toLowerCase(); if(c) set.add(c); });
+            return set;
+        }
+        function cariSalesMatch(noFaktur, tglAcuan, namaTokoAcuan){
             const key=normFaktur(noFaktur);
             if(!key) return null;
             const kandidat=salesByFakturRaw.get(key);
             if(!kandidat || !kandidat.length) return null;
-            const refKey=toDateKey(tglAcuan);
             let dipakai=kandidat;
+            // PENTING: No.Faktur bisa dipakai ulang untuk CUSTOMER YANG BERBEDA (mis. penomoran
+            // reset tiap bulan). Kalau langsung digabung tanpa cek nama customer, Harga Beli
+            // milik transaksi customer lain bisa ikut kehitung sebagai Modal faktur ini, dan
+            // bikin Profit jadi salah total (bisa minus besar padahal sudah Lunas).
+            // Jadi: kalau No.Faktur ini dipakai oleh lebih dari satu customer berbeda di Bank
+            // Data Penjualan, wajib cocokkan dulu nama customer/toko-nya sebelum dipakai.
+            const namaTokoNorm=(namaTokoAcuan||'').trim().toLowerCase();
+            const customerSet=distinctCustomers(kandidat);
+            if(customerSet.size>1){
+                if(!namaTokoNorm) return null;
+                const samaCustomer=kandidat.filter(r=>(r.Customer||'').trim().toLowerCase()===namaTokoNorm);
+                if(!samaCustomer.length) return null;
+                dipakai=samaCustomer;
+            }
+            const refKey=toDateKey(tglAcuan);
             if(refKey){
-                const persisSama=kandidat.filter(r=>r.Tanggal===refKey);
+                const persisSama=dipakai.filter(r=>r.Tanggal===refKey);
                 if(persisSama.length) dipakai=persisSama;
                 else {
                     const refBulan=refKey.slice(0,7);
-                    const bulanSama=kandidat.filter(r=>(r.Tanggal||'').slice(0,7)===refBulan);
+                    const bulanSama=dipakai.filter(r=>(r.Tanggal||'').slice(0,7)===refBulan);
                     if(bulanSama.length) dipakai=bulanSama;
                 }
             }
@@ -2765,9 +2754,9 @@
             const days=cashDataMap[bulan]||[];
             days.forEach(day => {
                 (day.piutangDetail||[]).forEach(d => {
-                    const salesMatch=cariSalesMatch(d.noFaktur, d.tglFaktur||day.tanggal);
+                    const salesMatch=cariSalesMatch(d.noFaktur, d.tglFaktur||day.tanggal, d.namaToko);
                     const isFitri=salesMatch?salesMatch.hasFitri:((d.ket||'').toLowerCase().includes('minyak')||(d.namaToko||'').toLowerCase().includes('fitri'));
-                    const produkGabungan=salesMatch&&salesMatch.produkSet.size>0?Array.from(salesMatch.produkSet).join(', '):(d.produk||'⚠️ Belum match Bank Data (No.Faktur: '+(d.noFaktur||'-')+')');
+                    const produkGabungan=salesMatch&&salesMatch.produkSet.size>0?Array.from(salesMatch.produkSet).join(', '):(d.produk||(isFitri?'Minyak Fitri':'Rupa-Rupa'));
                     const salesNama=salesMatch&&salesMatch.salesName?salesMatch.salesName:(d.sales||'-');
                     const tagihan=d.tagihan||0;
                     const totalBayar=d.totalBayar!=null?d.totalBayar:((d.bayarCash||0)+(d.bayarTransfer||0));
@@ -2777,22 +2766,59 @@
                     if(statusClass!=='lunas' && d.jt){ const jtDate=ptParseDMY(d.jt); if(jtDate && jtDate<todayPtUM){ statusClass='overdue'; overdueDays=ptDaysBetween(todayPtUM,jtDate); } }
                     let tglBayar='';
                     if(statusClass==='lunas' && day.tanggal){ const dayPart=String(day.tanggal).split('-')[0]; const [tahun,bulanNum]=bulan.split('-'); if(dayPart) tglBayar=`${dayPart.padStart(2,'0')}/${bulanNum}/${tahun}`; }
-                    // Profit = uang diterima (Total Dibayar) - (Harga Beli x Qty) dari produk di faktur terkait
+                    // Profit dihitung PROPORSIONAL sesuai porsi yang sudah dibayar (model konsinyasi/titip):
+                    // - Barang yang belum dibayar dianggap masih brg/stok di toko (bukan kerugian).
+                    // - Modal yang "dikorbankan" hanya untuk porsi yang sudah terbayar.
+                    // Profit Real = Total Dibayar - (Proporsi Dibayar x Total Modal)
                     const modalTotal=salesMatch?salesMatch.modalTotal:0;
                     const modalAda=salesMatch?salesMatch.modalAda:false;
-                    const profit=modalAda?(totalBayar-modalTotal):'';
-                    piutangUangMasukData.push({...d,sales:salesNama,tglFaktur:d.tglFaktur||day.tanggal,kategori:isFitri?'fitri':'rupa',produk:produkGabungan,jatuhTempo:d.jt||'-',totalBayar,sisaTagihan,statusClass,overdueDays,tglBayar,profit,_bulan:bulan,_tanggalHari:day.tanggal});
+                    const proporsiBayar=tagihan>0?Math.max(0,Math.min(1,totalBayar/tagihan)):(totalBayar>0?1:0);
+                    const modalProporsional=modalAda?(proporsiBayar*modalTotal):0;
+                    const profit=modalAda?(totalBayar-modalProporsional):'';
+                    const profitKotorTotal=modalAda?(tagihan-modalTotal):'';
+                    const sisaModalTertahan=modalAda?(modalTotal-modalProporsional):'';
+                    const estimasiProfitSisa=modalAda?((sisaTagihan)-sisaModalTertahan):'';
+                    const profitItems=salesMatch?salesMatch.items:[];
+                    piutangUangMasukData.push({...d,sales:salesNama,tglFaktur:d.tglFaktur||day.tanggal,kategori:isFitri?'fitri':'rupa',produk:produkGabungan,jatuhTempo:d.jt||'-',totalBayar,sisaTagihan,statusClass,overdueDays,tglBayar,profit,modalTotal,modalAda,proporsiBayar,modalProporsional,profitKotorTotal,sisaModalTertahan,estimasiProfitSisa,profitItems,_bulan:bulan,_tanggalHari:day.tanggal,_id:piutangUangMasukData.length});
                 });
                 (day.cashDroppingDetail||[]).forEach(d => {
-                    const salesMatch=cariSalesMatch(d.noFaktur, d.tglFaktur||day.tanggal);
+                    const salesMatch=cariSalesMatch(d.noFaktur, d.tglFaktur||day.tanggal, d.namaToko);
                     const isFitri=salesMatch?salesMatch.hasFitri:((d.ket||'').toLowerCase().includes('minyak')||(d.namaToko||'').toLowerCase().includes('fitri'));
                     const salesNama=salesMatch&&salesMatch.salesName?salesMatch.salesName:(d.sales||d.dropping_sales||'-');
-                    cashDroppingUangMasukData.push({...d,sales:salesNama,tglFaktur:d.tglFaktur||day.tanggal,kategori:isFitri?'fitri':'rupa',_bulan:bulan,_tanggalHari:day.tanggal});
+                    const produkGabungan=salesMatch&&salesMatch.produkSet.size>0?Array.from(salesMatch.produkSet).join(', '):(d.produk||(isFitri?'Minyak Fitri':'Rupa-Rupa'));
+                    const tagihanCdd=d.tagihan||0;
+                    const totalBayarCdd=d.totalBayar!=null?d.totalBayar:((d.bayarCash||0)+(d.bayarTransfer||0));
+                    const modalTotalCdd=salesMatch?salesMatch.modalTotal:0;
+                    const modalAdaCdd=salesMatch?salesMatch.modalAda:false;
+                    const proporsiBayarCdd=tagihanCdd>0?Math.max(0,Math.min(1,totalBayarCdd/tagihanCdd)):(totalBayarCdd>0?1:0);
+                    const modalProporsionalCdd=modalAdaCdd?(proporsiBayarCdd*modalTotalCdd):0;
+                    const profitCdd=modalAdaCdd?(totalBayarCdd-modalProporsionalCdd):'';
+                    const profitKotorTotalCdd=modalAdaCdd?(tagihanCdd-modalTotalCdd):'';
+                    const sisaModalTertahanCdd=modalAdaCdd?(modalTotalCdd-modalProporsionalCdd):'';
+                    const sisaTagihanCdd=Math.max(0,tagihanCdd-totalBayarCdd);
+                    let tglBayarCdd='';
+                    if(sisaTagihanCdd<=0.5 && day.tanggal){ const dayPart=String(day.tanggal).split('-')[0]; const [tahun,bulanNum]=bulan.split('-'); if(dayPart) tglBayarCdd=`${dayPart.padStart(2,'0')}/${bulanNum}/${tahun}`; }
+                    const estimasiProfitSisaCdd=modalAdaCdd?(sisaTagihanCdd-sisaModalTertahanCdd):'';
+                    cashDroppingUangMasukData.push({...d,sales:salesNama,tglFaktur:d.tglFaktur||day.tanggal,kategori:isFitri?'fitri':'rupa',produk:produkGabungan,tagihan:tagihanCdd,totalBayar:totalBayarCdd,sisaTagihan:sisaTagihanCdd,tglBayar:tglBayarCdd,modalTotal:modalTotalCdd,modalAda:modalAdaCdd,proporsiBayar:proporsiBayarCdd,modalProporsional:modalProporsionalCdd,profit:profitCdd,profitKotorTotal:profitKotorTotalCdd,sisaModalTertahan:sisaModalTertahanCdd,estimasiProfitSisa:estimasiProfitSisaCdd,profitItems:salesMatch?salesMatch.items:[],_bulan:bulan,_tanggalHari:day.tanggal,_id:cashDroppingUangMasukData.length});
                 });
             });
         }
-        piutangUangMasukData.sort((a,b)=>(b.tglFaktur||'').localeCompare(a.tglFaktur||''));
-        cashDroppingUangMasukData.sort((a,b)=>(b.tglFaktur||'').localeCompare(a.tglFaktur||''));
+        function pumSortDate(d){
+            const parsed=ptParseDMY(d.tglFaktur);
+            if(parsed) return parsed.getTime();
+            if(d._bulan && d._tanggalHari){
+                const [thn,bln]=d._bulan.split('-'); const hariPart=String(d._tanggalHari).split('-')[0];
+                const alt=new Date(parseInt(thn),parseInt(bln)-1,parseInt(hariPart));
+                if(!isNaN(alt.getTime())) return alt.getTime();
+            }
+            return 0;
+        }
+        function pumSortTglBayar(d){
+            const parsed=ptParseDMY(d.tglBayar);
+            return parsed?parsed.getTime():0;
+        }
+        piutangUangMasukData.sort((a,b)=>pumSortDate(a)-pumSortDate(b));
+        cashDroppingUangMasukData.sort((a,b)=>pumSortDate(a)-pumSortDate(b));
     }
 
     function updateUangMasukFilterOptions() {
@@ -2820,13 +2846,20 @@
         const tanggal=document.getElementById('piutangUangMasukTanggal').value;
         const bulan=document.getElementById('piutangUangMasukBulan').value;
         const sales=document.getElementById('piutangUangMasukSales').value;
-        return piutangUangMasukData.filter(d => {
+        const status=document.getElementById('piutangUangMasukStatus')?document.getElementById('piutangUangMasukStatus').value:'';
+        let hasil=piutangUangMasukData.filter(d => {
             if(search && !((d.noFaktur||'').toLowerCase().includes(search)||(d.namaToko||'').toLowerCase().includes(search))) return false;
             if(tanggal && d.tglFaktur!==tanggal) return false;
             if(bulan && d._bulan!==bulan) return false;
             if(sales && d.sales!==sales) return false;
+            if(status==='lunas' && d.statusClass!=='lunas') return false;
+            if(status==='titip' && d.statusClass==='lunas') return false;
             return true;
         });
+        // Saat filter Status = Sudah Lunas, urutkan berdasarkan TGL BAYAR asli supaya kolom itu
+        // tampil kronologis/berurutan (di luar filter ini, urutan tetap ikuti tanggal transaksi).
+        if(status==='lunas'){ hasil=hasil.slice().sort((a,b)=>pumSortTglBayar(a)-pumSortTglBayar(b)); }
+        return hasil;
     }
 
     function getFilteredCashDroppingUangMasuk() {
@@ -2843,36 +2876,129 @@
         });
     }
 
+    function pumStatusBadgeHtml(d) {
+        return d.statusClass==='lunas'?'<span class="stempel-lunas">Lunas</span>':`<span class="badge pt-${d.statusClass}">${d.statusClass==='overdue'&&d.overdueDays!=null?`${d.overdueDays} hr/Overdue`:'Belum Lunas'}</span>`;
+    }
+    function pumProfitCellHtml(d) {
+        if(d.profit==='' || d.profit==null) return '<span style="color:#94a3b8;">-</span>';
+        const profitDisplay=clampProfit(d.profit);
+        // Persentase dihitung sama seperti di tab Bank Data Penjualan: Profit ÷ Modal (Harga Beli) × 100%.
+        // Ini persentase MARKUP faktur tersebut (tetap sama walau baru dibayar sebagian/titip);
+        // yang berubah proporsional kalau baru bayar sebagian adalah nominal Rupiah-nya saja.
+        const basisPctRaw=(d.modalTotal>0 && d.profitKotorTotal!=='' && d.profitKotorTotal!=null)?(d.profitKotorTotal/d.modalTotal*100):null;
+        const basisPct=basisPctRaw!=null?Math.max(0,basisPctRaw):null;
+        const pctHtml=basisPct!=null?` <span style="font-weight:400;font-size:0.9em;color:#15803d;">(${basisPct.toFixed(1)}%)</span>`:'';
+        return `<span style="color:#15803d;font-weight:700;">${fmtRp(profitDisplay)}</span>${pctHtml}`;
+    }
+    function pumPeriodLabel() {
+        const bulanVal=document.getElementById('piutangUangMasukBulan').value;
+        return bulanVal?fmtBulanTahun(bulanVal):'Semua Periode Ditampilkan';
+    }
+    function pumRenderSummaryCards(filtered) {
+        let totalTagihan=0,totalDibayar=0,totalSisa=0,totalProfit=0,countProfitMissing=0;
+        filtered.forEach(d=>{
+            totalTagihan+=parseNumber(d.tagihan)||0;
+            totalDibayar+=parseNumber(d.totalBayar)||0;
+            totalSisa+=parseNumber(d.sisaTagihan)||0;
+            if(d.profit!==''&&d.profit!=null){ totalProfit+=clampProfit(d.profit); } else { countProfitMissing++; }
+        });
+        document.getElementById('pumSumPeriode').textContent=pumPeriodLabel();
+        document.getElementById('pumSumCountFaktur').textContent=filtered.length+' faktur';
+        document.getElementById('pumSumTagihan').textContent=fmtRp(totalTagihan);
+        document.getElementById('pumSumDibayar').textContent=fmtRp(totalDibayar);
+        document.getElementById('pumSumSisa').textContent=fmtRp(totalSisa);
+        document.getElementById('pumSumProfit').textContent=fmtRp(totalProfit);
+        document.getElementById('pumSumProfit').className='value';
+        const noteEl=document.getElementById('pumSumProfitNote');
+        noteEl.style.display=countProfitMissing>0?'block':'none';
+        noteEl.textContent=countProfitMissing>0?`* ${countProfitMissing} faktur belum dihitung (Harga Beli belum ada, atau No.Faktur sama dipakai customer lain sehingga tidak bisa dipastikan)`:'';
+    }
+    let piutangUangMasukViewMode = localStorage.getItem('pumViewMode')==='card'?'card':'table';
+    function pumApplyViewModeUI() {
+        const tableWrap=document.getElementById('piutangUangMasukTableWrap');
+        const cardList=document.getElementById('piutangUangMasukCardList');
+        const toggleBtn=document.getElementById('piutangUangMasukViewToggle');
+        if(piutangUangMasukViewMode==='card'){ tableWrap.style.display='none'; cardList.style.display='grid'; toggleBtn.innerHTML='📋 Mode Tabel'; }
+        else { tableWrap.style.display='block'; cardList.style.display='none'; toggleBtn.innerHTML='🗂️ Mode Kartu'; }
+    }
+    function pumRenderCardList(pageRows) {
+        const cardList=document.getElementById('piutangUangMasukCardList');
+        if(pageRows.length===0){ cardList.innerHTML='<div class="empty-msg">📂 Tidak ada data piutang tempo dari Data Uang Masuk.</div>'; return; }
+        cardList.innerHTML=pageRows.map(d=>{
+            const items=(Array.isArray(d.profitItems)&&d.profitItems.length>0)?d.profitItems:[{produk:d.produk||'-',qty:'',satuan:''}];
+            const produkListHtml=items.map(it=>`<div style="display:flex;justify-content:space-between;gap:6px;padding:2px 0;border-bottom:1px dashed #e2e8f0;"><span>${escapeHtml(it.produk||'-')}</span><span style="white-space:nowrap;color:#475569;">${it.qty!==''&&it.qty!=null?it.qty:''} ${it.satuan||''}</span></div>`).join('');
+            return `
+            <div class="pt-card-item ${d.statusClass==='overdue'?'pt-card-overdue':''}" onclick="openPumDetail(${d._id})">
+                <div class="pt-card-top">
+                    <span class="faktur-link">${d.noFaktur||'-'}</span>
+                    ${pumStatusBadgeHtml(d)}
+                </div>
+                <div class="pt-card-row"><span>Customer</span><span>${d.namaToko||'-'}</span></div>
+                <div class="pt-card-row"><span>Sales</span><span>${d.sales||'-'}</span></div>
+                <div class="pt-card-row"><span>Tgl Transaksi</span><span>${d.tglFaktur||'-'}</span></div>
+                <div class="pt-card-row"><span>Jatuh Tempo</span><span>${d.jatuhTempo||'-'}${d.overdueDays!=null?` (${d.overdueDays} hr)`:''}</span></div>
+                <div style="margin:6px 0;padding:6px 8px;background:#f8fafc;border-radius:6px;">
+                    <div style="font-size:9px;font-weight:700;color:#64748b;margin-bottom:2px;">PRODUK</div>
+                    ${produkListHtml}
+                </div>
+                <div class="pt-card-row"><span>Total Tagihan</span><span>${fmtRp(d.tagihan)}</span></div>
+                <div class="pt-card-row"><span>Sisa Tagihan</span><span style="${d.sisaTagihan>0.5?'color:#b91c1c;font-weight:700;':''}">${fmtRp(d.sisaTagihan)}</span></div>
+                <div class="pt-card-row highlight"><span>Profit</span><span>${pumProfitCellHtml(d)}</span></div>
+            </div>
+        `;
+        }).join('');
+    }
+    document.getElementById('piutangUangMasukViewToggle').addEventListener('click', function(){
+        piutangUangMasukViewMode = piutangUangMasukViewMode==='card'?'table':'card';
+        localStorage.setItem('pumViewMode', piutangUangMasukViewMode);
+        pumApplyViewModeUI();
+        renderPiutangUangMasuk();
+    });
+
     function renderPiutangUangMasuk() {
         const filtered=getFilteredPiutangUangMasuk();
+        pumRenderSummaryCards(filtered);
+        pumApplyViewModeUI();
         const totalPages=Math.max(1,Math.ceil(filtered.length/UANG_MASUK_ROWS_PER_PAGE));
         if(piutangUangMasukPage>totalPages) piutangUangMasukPage=totalPages;
         if(piutangUangMasukPage<1) piutangUangMasukPage=1;
         const start=(piutangUangMasukPage-1)*UANG_MASUK_ROWS_PER_PAGE;
         const pageRows=filtered.slice(start,start+UANG_MASUK_ROWS_PER_PAGE);
         const tbody=document.getElementById('piutangUangMasukBody');
-        if(pageRows.length===0){ tbody.innerHTML='<tr><td colspan="15" class="empty-msg">📂 Tidak ada data piutang tempo dari Data Uang Masuk.</td></tr>'; }
+        if(pageRows.length===0){ tbody.innerHTML='<tr><td colspan="17" class="empty-msg">📂 Tidak ada data piutang tempo dari Data Uang Masuk.</td></tr>'; }
         else { tbody.innerHTML=pageRows.map((d,i)=>{
-            const statusBadge=d.statusClass==='lunas'?'<span class="stempel-lunas">Lunas</span>':`<span class="badge pt-${d.statusClass}">${d.statusClass==='overdue'&&d.overdueDays!=null?`${d.overdueDays} hr/Overdue`:'Belum Lunas'}</span>`;
-            const profitCell=d.profit===''?'<span style="color:#94a3b8;">-</span>':`<span style="${d.profit<0?'color:#b91c1c;font-weight:700;':'color:#15803d;font-weight:700;'}">${fmtRp(d.profit)}</span>`;
-            return `<tr class="${d.statusClass==='overdue'?'pt-row-overdue':''}">
-                <td>${d.noFaktur||'-'}</td>
+            const statusBadge=pumStatusBadgeHtml(d);
+            const profitCell=pumProfitCellHtml(d);
+            const rowClass=d.statusClass==='overdue'?'pt-row-overdue':'';
+            // Satu faktur bisa berisi beberapa produk berbeda (mis. Botol 800ML & 400ML dalam 1 faktur).
+            // Supaya PRODUK terlihat jelas per baris (seperti tabel Bank Data Penjualan), faktur yang sama
+            // ditulis berulang untuk tiap produk, masing-masing dengan Jumlah & Satuan-nya sendiri.
+            const items=(Array.isArray(d.profitItems)&&d.profitItems.length>0)?d.profitItems:[{produk:d.produk||'-',qty:'',satuan:''}];
+            return items.map((it,idxItem)=>{
+                const isFirst=idxItem===0;
+                const groupBorder=isFirst&&i>0?'border-top:2px solid #cbd5e1;':'';
+                return `<tr class="${rowClass}" style="${groupBorder}">
+                <td><span class="faktur-link" onclick="openPumDetail(${d._id})" title="Klik untuk lihat detail faktur">${d.noFaktur||'-'}</span></td>
                 <td>${d.tglFaktur||'-'}</td>
                 <td>${d.namaToko||'-'}</td>
                 <td>${d.alamat||'-'}</td>
                 <td>${d.sales||'-'}</td>
                 <td><span class="badge pt-tercatat">${d.kategori==='fitri'?'MINYAK FITRI':'RUPA RUPA'}</span></td>
-                <td>${(d.produk||'-').startsWith('⚠️')?`<span style="color:#b91c1c;font-weight:600;">${d.produk}</span>`:(d.produk||'-')}</td>
-                <td class="num">${fmtRp(d.tagihan)}</td>
-                <td class="num" style="${d.sisaTagihan>0.5?'color:#b91c1c;font-weight:700;':''}">${fmtRp(d.sisaTagihan)}</td>
-                <td>${d.jatuhTempo||'-'}${d.overdueDays!=null?` <span style="color:#b91c1c;font-weight:700;">(${d.overdueDays} hr)</span>`:''}</td>
-                <td>${statusBadge}</td>
-                <td>${d.tglBayar||'-'}</td>
-                <td class="num">${fmtRp(d.totalBayar)}</td>
-                <td class="num">${profitCell}</td>
-                <td>${d.ket||'-'}</td>
+                <td style="font-weight:600;">${escapeHtml(it.produk||'-')}</td>
+                <td class="num">${it.qty!==''&&it.qty!=null?it.qty:'-'}</td>
+                <td>${it.satuan||'-'}</td>
+                <td class="num">${isFirst?fmtRp(d.tagihan):''}</td>
+                <td class="num" style="${d.sisaTagihan>0.5?'color:#b91c1c;font-weight:700;':''}">${isFirst?fmtRp(d.sisaTagihan):''}</td>
+                <td>${isFirst?(d.jatuhTempo||'-')+(d.overdueDays!=null?` <span style="color:#b91c1c;font-weight:700;">(${d.overdueDays} hr)</span>`:''):''}</td>
+                <td>${isFirst?statusBadge:''}</td>
+                <td>${isFirst?(d.tglBayar||'-'):''}</td>
+                <td class="num">${isFirst?fmtRp(d.totalBayar):''}</td>
+                <td class="num">${isFirst?profitCell:''}</td>
+                <td>${isFirst?(d.ket||'-'):''}</td>
             </tr>`;
+            }).join('');
         }).join(''); }
+        pumRenderCardList(pageRows);
         document.getElementById('piutangUangMasukPageLabel').textContent=`Halaman ${piutangUangMasukPage} dari ${totalPages}`;
         document.getElementById('piutangUangMasukPrevPage').disabled=piutangUangMasukPage<=1;
         document.getElementById('piutangUangMasukNextPage').disabled=piutangUangMasukPage>=totalPages;
@@ -2881,16 +3007,176 @@
         document.getElementById('badgePiutangUangMasuk').textContent=filtered.length;
     }
 
+    function openPumDetail(id, source) {
+        source = source || 'piutang';
+        const dataArr = source==='cash' ? cashDroppingUangMasukData : piutangUangMasukData;
+        const d=dataArr.find(row=>row._id===id);
+        if(!d){ showToast('⚠️ Data faktur tidak ditemukan.','warning'); return; }
+        const isTempo = source!=='cash';
+        document.getElementById('pumDetailTitle').textContent=`🧾 Detail Faktur - ${d.noFaktur||'-'}`;
+        const statusBadge = isTempo
+            ? (d.statusClass==='lunas'?'<span class="stempel-lunas">Lunas</span>':`<span class="badge pt-${d.statusClass}">${d.statusClass==='overdue'&&d.overdueDays!=null?`${d.overdueDays} hr/Overdue`:'Belum Lunas'}</span>`)
+            : '<span class="badge pt-tercatat">Cash Dropping</span>';
+        const items=Array.isArray(d.profitItems)?d.profitItems:[];
+        let profitSectionHtml='';
+        if(items.length>0){
+            const proporsiBayar=d.proporsiBayar||0;
+            const rowsHtml=items.map(it=>{
+                const subtotalJual=(it.qty||0)*(it.hargaJual||0);
+                if(!it.adaHargaBeli){
+                    return `<tr>
+                        <td>${escapeHtml(it.produk||'-')}</td>
+                        <td class="num">${it.qty||0}</td>
+                        <td>${it.satuan||'-'}</td>
+                        <td class="num">${fmtRp(it.hargaJual)}</td>
+                        <td class="num"><span style="color:#94a3b8;">belum diisi</span></td>
+                        <td class="num" colspan="5" style="color:#94a3b8;">Profit belum bisa dihitung (Harga Beli kosong)</td>
+                    </tr>`;
+                }
+                const profitFull=clampProfit(subtotalJual-it.subtotalModal);
+                const pctProfitMasuk=it.subtotalModal>0?Math.max(0,(profitFull/it.subtotalModal*100)):0;
+                const bayarTitip=proporsiBayar*subtotalJual;
+                const profitTitipMasuk=clampProfit(proporsiBayar*(subtotalJual-it.subtotalModal));
+                const pctProfitTitipMasuk=it.subtotalModal>0?Math.max(0,(profitTitipMasuk/it.subtotalModal*100)):0;
+                return `<tr>
+                    <td>${escapeHtml(it.produk||'-')}</td>
+                    <td class="num">${it.qty||0}</td>
+                    <td>${it.satuan||'-'}</td>
+                    <td class="num">${fmtRp(it.hargaJual)}</td>
+                    <td class="num">${fmtRp(it.hargaBeli)}</td>
+                    <td class="num" style="color:#15803d;font-weight:700;">${fmtRp(profitFull)}</td>
+                    <td class="num">${pctProfitMasuk.toFixed(2)}%</td>
+                    <td class="num">${fmtRp(bayarTitip)}</td>
+                    <td class="num" style="color:#15803d;font-weight:700;">${fmtRp(profitTitipMasuk)}</td>
+                    <td class="num">${pctProfitTitipMasuk.toFixed(2)}%</td>
+                </tr>`;
+            }).join('');
+            const persenBayar=(proporsiBayar*100);
+            const persenBayarStr=(Math.round(persenBayar*10)/10)+'%';
+            const belumLunas=d.sisaTagihan>0.5;
+            profitSectionHtml=`<div class="pum-section-title">💰 Rincian Perhitungan Profit (Proporsional / Konsinyasi)</div>
+                <div style="font-size:9.5px;color:#64748b;margin:-4px 0 6px 0;">Proporsi terbayar faktur ini: <strong>${d.modalAda?persenBayarStr:'-'}</strong> — Profit(titip)Masuk = Profit × proporsi terbayar. Profit tidak pernah ditampilkan minus (barang belum dibayar dianggap stok tertahan, bukan kerugian).</div>
+                <div style="overflow-x:auto;">
+                <table class="pum-profit-table">
+                    <thead><tr><th>Produk</th><th class="num">Jumlah</th><th>Satuan</th><th class="num">Harga Jual</th><th class="num">Harga Beli</th><th class="num">Profit</th><th class="num">%Profit Masuk</th><th class="num">Bayar Titip</th><th class="num">Profit(titip)Masuk</th><th class="num">%Profit titip Masuk</th></tr></thead>
+                    <tbody>${rowsHtml}</tbody>
+                </table>
+                </div>
+                ${belumLunas?`<div class="pum-formula-box" style="border-color:#93c5fd;background:#eff6ff;margin-top:8px;">
+                    <div style="font-weight:700;color:#1d4ed8;margin-bottom:4px;">📦 Sisa Tagihan = Barang/Stok Tertahan (Bukan Rugi)</div>
+                    <div>Sisa Tagihan (belum dibayar) &nbsp;=&nbsp; <strong>${fmtRp(d.sisaTagihan)}</strong> — ini adalah nilai barang yang masih tertahan di customer, bukan piutang untung.</div>
+                    <div>Sisa Modal Tertahan &nbsp;=&nbsp; Total Modal − Modal Proporsional &nbsp;=&nbsp; <strong>${d.modalAda?fmtRp(d.sisaModalTertahan):'-'}</strong> — masih berupa aset/persediaan, bukan kerugian.</div>
+                    <div>Estimasi Tambahan Profit saat Lunas &nbsp;=&nbsp; <strong style="color:#15803d;">${d.modalAda?fmtRp(clampProfit(d.estimasiProfitSisa)):'-'}</strong></div>
+                </div>`:''}
+                ${!d.modalAda?`<div class="pum-warn-box">⚠️ Harga Beli belum lengkap di Bank Data Penjualan untuk faktur ini, sehingga Profit belum bisa dihitung secara akurat.</div>`:''}`;
+        } else {
+            profitSectionHtml=`<div class="pum-section-title">💰 Rincian Perhitungan Profit</div>
+                <div class="pum-warn-box">⚠️ Tidak ditemukan data produk/Harga Beli yang cocok di Bank Data Penjualan untuk faktur ini (kemungkinan No. Faktur belum tercatat di sana), sehingga Profit belum bisa dihitung.</div>`;
+        }
+        const infoRowsTempo = isTempo ? `
+                <div><strong>Jatuh Tempo:</strong> ${d.jatuhTempo||'-'}${d.overdueDays!=null?` <span style="color:#b91c1c;font-weight:700;">(${d.overdueDays} hr)</span>`:''}</div>
+                <div><strong>Status:</strong> ${statusBadge}</div>
+                <div><strong>Tgl Bayar:</strong> ${d.tglBayar||'-'}</div>` : `
+                <div><strong>Bayar Cash:</strong> ${fmtRp(d.bayarCash||d.minyakCash||0)}</div>
+                <div><strong>Status:</strong> ${statusBadge}</div>
+                <div><strong>Bayar Transfer:</strong> ${fmtRp(d.bayarTransfer||d.minyakTransfer||0)}</div>`;
+        document.getElementById('pumDetailBody').innerHTML = `
+            <div class="pum-section-title">📋 Informasi Faktur</div>
+            <div class="pum-grid">
+                <div><strong>No. Faktur:</strong> ${d.noFaktur||'-'}</div>
+                <div><strong>Tgl Transaksi:</strong> ${d.tglFaktur||'-'}</div>
+                <div><strong>Customer:</strong> ${d.namaToko||'-'}</div>
+                <div><strong>Sales:</strong> ${d.sales||'-'}</div>
+                <div><strong>Alamat:</strong> ${d.alamat||'-'}</div>
+                <div><strong>Kategori:</strong> ${d.kategori==='fitri'?'Minyak Fitri':'Rupa Rupa'}</div>
+                <div style="grid-column:1/-1;"><strong>Produk:</strong> ${d.produk||'-'}</div>
+                ${infoRowsTempo}
+                <div style="grid-column:1/-1;"><strong>Keterangan:</strong> ${d.ket||'-'}</div>
+            </div>
+            <div class="pum-section-title">💵 Ringkasan Tagihan</div>
+            <div class="pum-grid">
+                <div><strong>Total Tagihan:</strong> ${fmtRp(d.tagihan)}</div>
+                <div><strong>Total Dibayar:</strong> ${fmtRp(d.totalBayar)}</div>
+                <div><strong>Sisa Tagihan:</strong> <span style="${d.sisaTagihan>0.5?'color:#b91c1c;font-weight:700;':''}">${fmtRp(d.sisaTagihan)}</span></div>
+            </div>
+            ${profitSectionHtml}
+        `;
+        document.getElementById('pumDetailModal').classList.add('show');
+    }
+    document.getElementById('pumDetailClose').addEventListener('click', ()=>{ document.getElementById('pumDetailModal').classList.remove('show'); });
+    document.getElementById('pumDetailModal').addEventListener('click', (e)=>{ if(e.target===e.currentTarget) e.currentTarget.classList.remove('show'); });
+
+    function cddPeriodLabel() {
+        const bulanVal=document.getElementById('cashDroppingUangMasukBulan').value;
+        return bulanVal?fmtBulanTahun(bulanVal):'Semua Periode Ditampilkan';
+    }
+    function cddRenderSummaryCards(filtered) {
+        let totalNominal=0,totalCash=0,totalTransfer=0,totalProfit=0,countProfitMissing=0;
+        filtered.forEach(d=>{
+            totalNominal+=parseNumber(d.tagihan)||0;
+            totalCash+=parseNumber(d.bayarCash)||0;
+            totalTransfer+=parseNumber(d.bayarTransfer)||0;
+            if(d.profit!==''&&d.profit!=null){ totalProfit+=clampProfit(d.profit); } else { countProfitMissing++; }
+        });
+        document.getElementById('cddSumPeriode').textContent=cddPeriodLabel();
+        document.getElementById('cddSumCountFaktur').textContent=filtered.length+' faktur';
+        document.getElementById('cddSumTagihan').textContent=fmtRp(totalNominal);
+        document.getElementById('cddSumCash').textContent=fmtRp(totalCash);
+        document.getElementById('cddSumTransfer').textContent=fmtRp(totalTransfer);
+        document.getElementById('cddSumProfit').textContent=fmtRp(totalProfit);
+        document.getElementById('cddSumProfit').className='value';
+        const noteEl=document.getElementById('cddSumProfitNote');
+        noteEl.style.display=countProfitMissing>0?'block':'none';
+        noteEl.textContent=countProfitMissing>0?`* ${countProfitMissing} faktur belum dihitung (Harga Beli belum ada, atau No.Faktur sama dipakai customer lain sehingga tidak bisa dipastikan)`:'';
+    }
+    let cashDroppingUangMasukViewMode = localStorage.getItem('cddViewMode')==='card'?'card':'table';
+    function cddApplyViewModeUI() {
+        const tableWrap=document.getElementById('cashDroppingUangMasukTableWrap');
+        const cardList=document.getElementById('cashDroppingUangMasukCardList');
+        const toggleBtn=document.getElementById('cashDroppingUangMasukViewToggle');
+        if(cashDroppingUangMasukViewMode==='card'){ tableWrap.style.display='none'; cardList.style.display='grid'; toggleBtn.innerHTML='📋 Mode Tabel'; }
+        else { tableWrap.style.display='block'; cardList.style.display='none'; toggleBtn.innerHTML='🗂️ Mode Kartu'; }
+    }
+    function cddRenderCardList(pageRows) {
+        const cardList=document.getElementById('cashDroppingUangMasukCardList');
+        if(pageRows.length===0){ cardList.innerHTML='<div class="empty-msg">📂 Tidak ada data cash dropping dari Data Uang Masuk.</div>'; return; }
+        cardList.innerHTML=pageRows.map(d=>`
+            <div class="pt-card-item" onclick="openPumDetail(${d._id},'cash')">
+                <div class="pt-card-top">
+                    <span class="faktur-link">${d.noFaktur||'-'}</span>
+                    <span class="badge pt-tercatat">Cash</span>
+                </div>
+                <div class="pt-card-row"><span>Customer</span><span>${d.namaToko||'-'}</span></div>
+                <div class="pt-card-row"><span>Sales</span><span>${d.sales||'-'}</span></div>
+                <div class="pt-card-row"><span>Tanggal</span><span>${d.tglFaktur||'-'}</span></div>
+                <div class="pt-card-row"><span>Nominal</span><span>${fmtRp(d.tagihan)}</span></div>
+                <div class="pt-card-row"><span>Bayar Cash</span><span>${fmtRp(d.bayarCash)}</span></div>
+                <div class="pt-card-row"><span>Bayar Transfer</span><span>${fmtRp(d.bayarTransfer)}</span></div>
+                <div class="pt-card-row"><span>Tgl Bayar</span><span>${d.tglBayar||'-'}</span></div>
+                <div class="pt-card-row highlight"><span>Profit</span><span>${pumProfitCellHtml(d)}</span></div>
+            </div>
+        `).join('');
+    }
+    document.getElementById('cashDroppingUangMasukViewToggle').addEventListener('click', function(){
+        cashDroppingUangMasukViewMode = cashDroppingUangMasukViewMode==='card'?'table':'card';
+        localStorage.setItem('cddViewMode', cashDroppingUangMasukViewMode);
+        cddApplyViewModeUI();
+        renderCashDroppingUangMasuk();
+    });
+
     function renderCashDroppingUangMasuk() {
         const filtered=getFilteredCashDroppingUangMasuk();
+        cddRenderSummaryCards(filtered);
+        cddApplyViewModeUI();
         const totalPages=Math.max(1,Math.ceil(filtered.length/UANG_MASUK_ROWS_PER_PAGE));
         if(cashDroppingUangMasukPage>totalPages) cashDroppingUangMasukPage=totalPages;
         if(cashDroppingUangMasukPage<1) cashDroppingUangMasukPage=1;
         const start=(cashDroppingUangMasukPage-1)*UANG_MASUK_ROWS_PER_PAGE;
         const pageRows=filtered.slice(start,start+UANG_MASUK_ROWS_PER_PAGE);
         const tbody=document.getElementById('cashDroppingUangMasukBody');
-        if(pageRows.length===0){ tbody.innerHTML='<tr><td colspan="11" class="empty-msg">📂 Tidak ada data cash dropping dari Data Uang Masuk.</td></tr>'; }
-        else { tbody.innerHTML=pageRows.map((d,i)=>`<tr><td>${start+i+1}</td><td>${d.tglFaktur||'-'}</td><td>${d.noFaktur||'-'}</td><td>${d.sales||'-'}</td><td>${d.namaToko||'-'}</td><td>${d.alamat||'-'}</td><td>${d.kategori==='fitri'?'Minyak Fitri':'Rupa Rupa'}</td><td class="num">${fmtRp(d.tagihan)}</td><td class="num">${fmtRp(d.bayarCash)}</td><td class="num">${fmtRp(d.bayarTransfer)}</td><td>${d.ket||'-'}</td></tr>`).join(''); }
+        if(pageRows.length===0){ tbody.innerHTML='<tr><td colspan="13" class="empty-msg">📂 Tidak ada data cash dropping dari Data Uang Masuk.</td></tr>'; }
+        else { tbody.innerHTML=pageRows.map((d,i)=>`<tr><td>${start+i+1}</td><td>${d.tglFaktur||'-'}</td><td><span class="faktur-link" onclick="openPumDetail(${d._id},'cash')" title="Klik untuk lihat detail faktur">${d.noFaktur||'-'}</span></td><td>${d.sales||'-'}</td><td>${d.namaToko||'-'}</td><td>${d.alamat||'-'}</td><td>${d.kategori==='fitri'?'Minyak Fitri':'Rupa Rupa'}</td><td class="num">${fmtRp(d.tagihan)}</td><td class="num">${fmtRp(d.bayarCash)}</td><td class="num">${fmtRp(d.bayarTransfer)}</td><td>${d.tglBayar||'-'}</td><td class="num">${pumProfitCellHtml(d)}</td><td>${d.ket||'-'}</td></tr>`).join(''); }
+        cddRenderCardList(pageRows);
         document.getElementById('cashDroppingUangMasukPageLabel').textContent=`Halaman ${cashDroppingUangMasukPage} dari ${totalPages}`;
         document.getElementById('cashDroppingUangMasukPrevPage').disabled=cashDroppingUangMasukPage<=1;
         document.getElementById('cashDroppingUangMasukNextPage').disabled=cashDroppingUangMasukPage>=totalPages;
@@ -2911,7 +3197,7 @@
     // Event listeners Tab 9
     document.getElementById('piutangUangMasukBtnRefresh').addEventListener('click', function(){ refreshPiutangUangMasuk(); showToast('🔄 Data Piutang Tempo & Cash Dropping dimuat ulang.','success'); });
     document.getElementById('piutangUangMasukBtnReset').addEventListener('click', function(){
-        document.getElementById('piutangUangMasukSearch').value=''; document.getElementById('piutangUangMasukTanggal').value=''; document.getElementById('piutangUangMasukBulan').value=''; document.getElementById('piutangUangMasukSales').value=''; piutangUangMasukPage=1; renderPiutangUangMasuk();
+        document.getElementById('piutangUangMasukSearch').value=''; document.getElementById('piutangUangMasukTanggal').value=''; document.getElementById('piutangUangMasukBulan').value=''; document.getElementById('piutangUangMasukSales').value=''; document.getElementById('piutangUangMasukStatus').value=''; piutangUangMasukPage=1; renderPiutangUangMasuk();
     });
     document.getElementById('piutangUangMasukPrevPage').addEventListener('click', function(){ if(piutangUangMasukPage>1){ piutangUangMasukPage--; renderPiutangUangMasuk(); } });
     document.getElementById('piutangUangMasukNextPage').addEventListener('click', function(){ const total=getFilteredPiutangUangMasuk().length; const totalPages=Math.max(1,Math.ceil(total/UANG_MASUK_ROWS_PER_PAGE)); if(piutangUangMasukPage<totalPages){ piutangUangMasukPage++; renderPiutangUangMasuk(); } });
@@ -2930,6 +3216,7 @@
     document.getElementById('piutangUangMasukTanggal').addEventListener('change', debouncePiutangUangMasuk);
     document.getElementById('piutangUangMasukBulan').addEventListener('change', debouncePiutangUangMasuk);
     document.getElementById('piutangUangMasukSales').addEventListener('change', debouncePiutangUangMasuk);
+    document.getElementById('piutangUangMasukStatus').addEventListener('change', debouncePiutangUangMasuk);
     document.getElementById('cashDroppingUangMasukSearch').addEventListener('input', debounceCashDroppingUangMasuk);
     document.getElementById('cashDroppingUangMasukTanggal').addEventListener('change', debounceCashDroppingUangMasuk);
     document.getElementById('cashDroppingUangMasukBulan').addEventListener('change', debounceCashDroppingUangMasuk);
@@ -3027,18 +3314,10 @@
             await loadPiutangNotes();
             await loadCashNotes();
             await loadCetakTagihanMap();
-            // Cari otomatis bulan TERAKHIR yang benar-benar punya data (bukan hardcode),
-            // supaya dashboard selalu terbuka di bulan terbaru yang isinya ada.
-            let defaultBulan='2026-07';
-            try {
-                const semuaCashRecords=await ambilSemuaCashIncomeCached(true);
-                const bulanBerisi=semuaCashRecords.filter(r=>r.bulan && Array.isArray(r.data) && r.data.length>0).map(r=>r.bulan);
-                if(bulanBerisi.length>0){ bulanBerisi.sort(); defaultBulan=bulanBerisi[bulanBerisi.length-1]; }
-            } catch(e){ console.warn('[STARTUP] Gagal menentukan bulan default otomatis, pakai fallback:',e); }
-            APP_DEFAULT_BULAN=defaultBulan;
+            const defaultBulan='2026-07'; APP_DEFAULT_BULAN=defaultBulan;
             rebuildSalesFilterOptions();
             const bulanSelect=document.getElementById('bulanPemasukan');
-            let found=false; for(let opt of bulanSelect.options){ if(opt.value===defaultBulan){ opt.selected=true; found=true; break; } } if(!found) bulanSelect.value=defaultBulan; cashBulan=bulanSelect.value;
+            let found=false; for(let opt of bulanSelect.options){ if(opt.value===defaultBulan){ opt.selected=true; found=true; break; } } if(!found) bulanSelect.value='2026-07'; cashBulan=bulanSelect.value;
             await loadCashData();
             
             // FIX: Cleanup duplicate cashIncome documents on startup

@@ -96,13 +96,6 @@
         .table-wrap tbody tr:nth-child(even) td { background:#f8fafc; }
         .table-wrap tbody tr:hover td { background:#f0f4ff; }
         .table-wrap td.num, .table-wrap th.num { text-align:right; }
-        .cash-table-wrap { overflow-x:auto; overflow-y:auto; max-height:65vh; border:1px solid #d1d5db; border-radius:var(--radius); background:#fff; box-shadow:var(--shadow); }
-        .cash-table-wrap table { width:100%; border-collapse:separate; border-spacing:0; font-size:0.65rem; min-width:480px; border-radius:12px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.08); }
-        .cash-table-wrap th { position:sticky; top:0; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:#ffffff; text-align:left; padding:12px 8px; font-size:0.6rem; text-transform:uppercase; letter-spacing:0.5px; border-right:1px solid rgba(255,255,255,0.1); white-space:nowrap; font-weight:700; z-index:5; border:none; }
-        .cash-table-wrap td { padding:10px 8px; border-bottom:1px solid #e8ecf4; white-space:nowrap; font-size:0.65rem; background:#fafbfc; transition:all 0.2s ease; }
-        .cash-table-wrap tbody tr:nth-child(even) td { background:#f8fafc; }
-        .cash-table-wrap tbody tr:hover td { background:#f0f4ff; }
-        .cash-table-wrap td.num, .cash-table-wrap th.num { text-align:right; }
         .empty-msg { padding:16px; text-align:center; color:#6b7280; font-size:11px; background:#fafbfc; }
         
         .pagination { display:flex; justify-content:space-between; align-items:center; padding:12px 16px; font-size:10px; flex-wrap:wrap; gap:8px; background:linear-gradient(to right,#f8fafc,#f0f4ff); border-radius:0 0 12px 12px; border:1px solid #e8ecf4; border-top:none; box-shadow:0 -2px 8px rgba(0,0,0,0.04); margin-top:-1px; }
@@ -182,8 +175,7 @@
         #tab7 .table-responsive { max-height:300px; overflow:auto !important; border:1px solid #dee2e6; border-radius:4px; margin:3px 4px; -webkit-overflow-scrolling:touch; }
         #tab7 .table { font-size:0.65rem !important; border-collapse:collapse; width:100%; min-width:800px; margin:0; }
         #tab7 .table th, #tab7 .table td { border:1px solid #a0a0a0; padding:2px 3px !important; vertical-align:middle; white-space:nowrap; }
-        #tab7 .table thead { position:sticky; top:0; z-index:5; }
-        #tab7 .table th { background:#d9e1f2; font-weight:600; font-size:0.6rem !important; text-align:center; padding:2px 3px !important; }
+        #tab7 .table th { background:#d9e1f2; font-weight:600; font-size:0.6rem !important; text-align:center; position:sticky; top:0; z-index:5; padding:2px 3px !important; }
         #tab7 .table .form-control-sm { padding:0 2px !important; font-size:0.6rem !important; height:20px !important; border-radius:0; border:1px solid #bfbfbf; background:#fff; width:100%; min-width:35px; max-width:80px; }
         #tab7 .table .form-control-sm[readonly] { background:#f1f3f4; }
         #tab7 .table .total-input { font-weight:700; background:#f1f3f4 !important; }
@@ -2767,7 +2759,7 @@
                 (day.piutangDetail||[]).forEach(d => {
                     const salesMatch=cariSalesMatch(d.noFaktur, d.tglFaktur||day.tanggal);
                     const isFitri=salesMatch?salesMatch.hasFitri:((d.ket||'').toLowerCase().includes('minyak')||(d.namaToko||'').toLowerCase().includes('fitri'));
-                    const produkGabungan=salesMatch&&salesMatch.produkSet.size>0?Array.from(salesMatch.produkSet).join(', '):(d.produk||'⚠️ Belum match Bank Data (No.Faktur: '+(d.noFaktur||'-')+')');
+                    const produkGabungan=salesMatch&&salesMatch.produkSet.size>0?Array.from(salesMatch.produkSet).join(', '):(d.produk||(isFitri?'Minyak Fitri':'Rupa-Rupa'));
                     const salesNama=salesMatch&&salesMatch.salesName?salesMatch.salesName:(d.sales||'-');
                     const tagihan=d.tagihan||0;
                     const totalBayar=d.totalBayar!=null?d.totalBayar:((d.bayarCash||0)+(d.bayarTransfer||0));
@@ -2862,7 +2854,7 @@
                 <td>${d.alamat||'-'}</td>
                 <td>${d.sales||'-'}</td>
                 <td><span class="badge pt-tercatat">${d.kategori==='fitri'?'MINYAK FITRI':'RUPA RUPA'}</span></td>
-                <td>${(d.produk||'-').startsWith('⚠️')?`<span style="color:#b91c1c;font-weight:600;">${d.produk}</span>`:(d.produk||'-')}</td>
+                <td>${d.produk||'-'}</td>
                 <td class="num">${fmtRp(d.tagihan)}</td>
                 <td class="num" style="${d.sisaTagihan>0.5?'color:#b91c1c;font-weight:700;':''}">${fmtRp(d.sisaTagihan)}</td>
                 <td>${d.jatuhTempo||'-'}${d.overdueDays!=null?` <span style="color:#b91c1c;font-weight:700;">(${d.overdueDays} hr)</span>`:''}</td>
@@ -3027,18 +3019,10 @@
             await loadPiutangNotes();
             await loadCashNotes();
             await loadCetakTagihanMap();
-            // Cari otomatis bulan TERAKHIR yang benar-benar punya data (bukan hardcode),
-            // supaya dashboard selalu terbuka di bulan terbaru yang isinya ada.
-            let defaultBulan='2026-07';
-            try {
-                const semuaCashRecords=await ambilSemuaCashIncomeCached(true);
-                const bulanBerisi=semuaCashRecords.filter(r=>r.bulan && Array.isArray(r.data) && r.data.length>0).map(r=>r.bulan);
-                if(bulanBerisi.length>0){ bulanBerisi.sort(); defaultBulan=bulanBerisi[bulanBerisi.length-1]; }
-            } catch(e){ console.warn('[STARTUP] Gagal menentukan bulan default otomatis, pakai fallback:',e); }
-            APP_DEFAULT_BULAN=defaultBulan;
+            const defaultBulan='2026-07'; APP_DEFAULT_BULAN=defaultBulan;
             rebuildSalesFilterOptions();
             const bulanSelect=document.getElementById('bulanPemasukan');
-            let found=false; for(let opt of bulanSelect.options){ if(opt.value===defaultBulan){ opt.selected=true; found=true; break; } } if(!found) bulanSelect.value=defaultBulan; cashBulan=bulanSelect.value;
+            let found=false; for(let opt of bulanSelect.options){ if(opt.value===defaultBulan){ opt.selected=true; found=true; break; } } if(!found) bulanSelect.value='2026-07'; cashBulan=bulanSelect.value;
             await loadCashData();
             
             // FIX: Cleanup duplicate cashIncome documents on startup
